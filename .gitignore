@@ -1,5 +1,6 @@
 resources/*
 src/index.pdf
+resources.lnk
 
 ## Core latex/pdflatex auxiliary files:
 *.aux

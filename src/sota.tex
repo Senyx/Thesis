@@ -118,11 +118,129 @@ TWR shall obtain approval from APP prior to authorizing SVFR flights, when so pr
 Doslovně z prezentace:
 Exchange of movement and control data
 TWR shall keep APP advised of data about controlled traffic such as:
-  arrival and departure times;
-  when required, that the first aircraft in the approach sequence is in  	communication with and is sighted by TWR, and that reasonable 	assurance exists that a landing will be accomplished;
-  information relating to overdue or unreported aircraft;
-  information concerning missed approaches; and
-  information concerning aircraft that are essential local traffic to aircraft 	under the control of APP.\cite[Chapter 10.1.4.2]{doc4444}
+\bitem
+\item arrival and departure times;
+\item when required, that the first aircraft in the approach sequence is in  	communication with and is sighted by TWR, and that reasonable 	assurance exists that a landing will be accomplished;
+\item information relating to overdue or unreported aircraft;
+\item information concerning missed approaches; and
+\item information concerning aircraft that are essential local traffic to aircraft 	under the control of APP.
+\eitem
+\cite[Chapter 10.1.4.2]{doc4444}
+
+Doslovně z prezentace:
+Transfer of control
+For arriving aircraft control shall be transferred from APP to TWR when the aircraft:
+\bitem
+\item is in the vicinity of the aerodrome, and
+	\bitem
+	\item it is considered that approach and landing will be completed in visual reference to the ground, or
+	\item has reached uninterrupted VMC; or
+	\eitem
+\item is at a prescribed point or level; or
+\item has landed, 
+	as specified in LOAs or unit instructions.
+\eitem
+Transfer of communication to TWR should at a point, level or time that landing clearance, alternative instructions and essential local traffic information can be issued in a timely manner.
+
+For departing aircraft control shall be transferred from TWR to APP:
+\bitem
+\item when VMC prevail in the vicinity of the aerodrome:
+	\bitem
+	\item prior to the time the aircraft leaves the vicinity of the aerodrome;
+	\item prior to the aircraft entering IMC; or
+	\item when the aircraft is at a prescribed point or level, as specified in LOAs or unit instructions; 
+	\eitem
+\item when IMC prevail at the aerodrome:
+	\bitem
+	\item immediately after the aircraft is airborne; or
+	\item when the aircraft is at a prescribed point or level, as specified in LOAs or unit instructions.
+	\eitem
+\eitem
+\cite[Chapter 4.3.2]{doc4444}
+
+Control shall be transferred from one sector/position to another within the same ATC unit at a point, level or time, as specified in local instructions.
+FPL and control information shall be exchanged between control positions within the same unit, in respect of:
+  all aircraft for which control will be transferred from one unit to another;
+  aircraft operating in such close proximity to an adjacent sector boundary 	that control of traffic in that sector may be affected;
+  all aircraft for which control will be transferred from a procedural controller 	to a surveillance controller, as well as other aircraft affected.
+These transfer of control and coordination procedures shall conform to agreements applicable to the ATC units.
+Even with all the modern electronic equipment and highly developed systems, coordination between controllers within a single sector, or adjoining sectors, if often based on clear, simple conversation. 
+This conversation is often conducted in the local native language or, when controllers are busy and occupied with other responsibilities, this communication may be conducted using body language (e.g. raising a hand or nodding the head). 
+Such coordination is normally not specified in local rules, and it important that controllers are very careful to ensure there is no misunderstanding between them.
+\cite[Chapter 4.3.5, 10.1.5]{doc4444}
+
+ICAO requires that a flight plan (FPL) message containing basic flight plan data is forwarded to the first ACC at least 30 minutes in advance of the flight, and to successive ACCs at least 20 minutes in advance of the flight reaching their area. Normally, due to flow control procedures and general air traffic planning requirements, this minimum is increased to 1 hour or even more, depending on agreements between units. 
+If ATC clearances change the route of flight so the aircraft will fly through other ATC areas of responsibility, a current flight plan (CPL) message must be forwarded to those units at least 20 minutes prior to entering their area. Normally, agreements between units will specify an increased time.
+An estimate (EST) message shall be forwarded at least 20 minutes prior to a flight entering a unit’s area of responsibility. This message contains the essential control information such as estimate, level and SSR code. The 20 minute time period may be increased or decreased, based on unit requirements and agreements.
+\cite[Chapter 11.3,4]{doc4444}
+
+Most common types of ATC coordination:
+\bitem
+\item current flight plan (20 MIN or more prior to control boundary) 
+\item estimate (20 MIN prior to control boundary, or LOAs); 
+\item revision (no ICAO defined time, LOAs);
+\item approval request (no ICAO defined time, LOAs); and
+\item transfer of control.
+\eitem
+
+\subsection{Altimetry}
+Výška nad mořem/terénem/tlak/potřeba referenční hladiny, závisí na teplotě=tlaku vzduchu
+
+QNE - standardní nastavení - letí se podle flight levelů - výška od referenční hladiny 1013.2 hPa
+QNH - letí se podle nadmořské výšky, je to hodnota tlaku na daném místě (typicky letišti) který po zadaání do výškoměru vrací správnou nadmořskou výšku
+QFE - výška nad povrchem země v daném místě - typicky u letiště
 
 
-\textcolor{red}{konec 9-1 43}
+Transition altitude
+The TA is the altitude at or below which the vertical position is expressed in terms of altitudes. The TA is established by the appropriate ATS authority.
+
+Transition level (TL) is flight level just above the TA. Transition layer is the layer between TA and TL. It is prohibited to fly on the level that is in the transition layer.
+
+When the plane is descending the pilot changes from QNE to QNH when passing TL. When climbing pilot changes from QNH to QNE on TA.
+
+Řídící musí včas předat letadlu hodnotu QNH a TL.
+
+\subsection{Separation}
+Vertical or horizontal separation shall be provided:
+
+between all flights in Class A and B airspaces;
+between IFR flights in Class C, D and E airspaces;
+between IFR and VFR flights in Class C airspace;
+between IFR and Special VFR flights; and
+between Special VFR flights, when so prescribed.
+\cite[Chapter 5.2]{doc4444}
+
+Separation should be achieved by one of the following:
+\bitem
+\item vertiacal - planes are assigned different cruising levels
+\item horizontal
+	\bitem
+	\item longitudinal - interval between planes flying on the same (converging, reciprocal) is maintained
+	\item lateral - planes fly on different routes
+	\eitem
+\item composite - combination of the above
+\eitem
+\cite[Chapter 3.3]{doc4444}
+
+\subsubsection{Vertical}
+Reduced vertical separation minima
+doslovně
+Minima
+Within RVSM airspace 
+1000ft between FL290 and FL410 inclusive, and
+2000ft above this level
+
+Within other airspace
+1000ft below FL290, and
+2000ft above FL290
+
+IFR flight levely vyhrazené pro jednotlivé směry: liché desítky na východ (0$^{\circ}$-179$^{\circ}$), sudé na západ(180$^{\circ}$-359$^{\circ}$)
+
+VFR flight levely končí pětkou
+
+\subsubsection{Longitudinal}
+15/10/5 minut separace nad stejným bodem podle typu situace 
+\cite[Chapter 5.4.2.2]{doc4444}
+
+
+\textcolor{red}{konec 14}

@@ -1,9 +1,83 @@
 %!TEX root = index.tex
-\include{head}
 
-\include{outline}
+\documentclass[11pt,oneside,a4paper]{book}
+%%%%\documentclass[11pt,twoside,a4paper]{book}   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\include{sota}
-%\include{work}
+\usepackage[czech, english]{babel}
+\usepackage[OT1]{fontenc} %[IL2] [T1] [OT1]
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{k336_thesis_macros}
+%\usepackage{indentfirst} %1. odstavec jako v cestine.
+
+\newcommand\TypeOfWork{Master's Thesis}
+\newcommand\StudProgram{Open Informatics}
+\newcommand\StudBranch{Software Engineering}
+\newcommand\WorkTitle{Air Traffic Control Simulation in Terminal Area}
+\newcommand\FirstandFamilyName{Bc. Jan Straka}
+\newcommand\Supervisor{Mgr. Přemysl Volf, Ph.D}
+\newcommand\Department{Department of Computer Science}
+\newcommand\Faculty{Faculty of Electrical Engineering}
+\newcommand\University{Czech Technical University in Prague}
+\newcommand\labelSupervisor{Supervisor}
+\newcommand\labelStudProgram{Study Programme} 
+\newcommand\labelStudBranch{Field of Study}
+
+\usepackage[
+pdftitle={\WorkTitle},
+pdfauthor={\FirstandFamilyName},
+bookmarks=true,
+colorlinks=true,
+breaklinks=true,
+urlcolor=red,
+citecolor=blue,
+linkcolor=blue,
+unicode=true,
+]{hyperref}
+
+\begin{document}
+\selectlanguage{english} 
+
+\coverpagestarts
+
+% \acknowledgements
+% \noindent
+% Zde můžete napsat své poděkování, pokud chcete a máte komu děkovat.
+
+
+% \declaration{In Prague on January 5, 2015}
+
+ 
+% \abstractpage
+% Translation of Czech abstract into English.
+% \vglue60mm
+% \noindent{\Huge \textbf{Abstrakt}}
+% \vskip 2.75\baselineskip
+% \noindent
+% Abstrakt práce by měl velmi stručně vystihovat její podstatu. Tedy čím se práce zabývá a co je jejím výsledkem/přínosem.
+% \noindent
+% Očekávají se cca 1 -- 2 odstavce, maximálně půl stránky.
+
+
+\tableofcontents
+% \listoffigures
+% \listoftables
+
+
+\mainbodystarts
+\normalfont
+\parskip=0.2\baselineskip plus 0.2\baselineskip minus 0.1\baselineskip
+
+\include{introduction}
+\include{sota}
+\include{data}
+\include{agentfly}
+\include{implementation}
+\include{testing}
+\include{conclusion}
+
 
 \include{foot}
+

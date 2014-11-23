@@ -22,24 +22,11 @@ This thesis focuses on Air Traffic Control and Air Traffic Flow Management in th
 
 
 
-\section{Airports}
-\subsection{Ground}
+%\section{Airports}
+%\subsection{Ground}
 
 \section{Used Units}
 \subsection{Altimetry}
-
-\section{Separation}
-\subsection{Vertical}
-\subsection{Horizontal}
-\subsubsection{Longitudinal}
-\subsubsection{Lateral}
-\subsection{Wake Turbulence Separation}
-
-\section{Holding}
-
-\section{Miles In Trails}
-
-
 
 % \subsection{Altimetry}
 % Výška nad mořem/terénem/tlak/potřeba referenční hladiny, závisí na teplotě=tlaku vzduchu
@@ -58,19 +45,25 @@ This thesis focuses on Air Traffic Control and Air Traffic Flow Management in th
 
 % Řídící musí včas předat letadlu hodnotu QNH a TL.
 
-% \subsection{Separation}
-% Vertical or horizontal separation shall be provided:
+\section{Separation}
 
-% between all flights in Class A and B airspaces;
-% between IFR flights in Class C, D and E airspaces;
-% between IFR and VFR flights in Class C airspace;
-% between IFR and Special VFR flights; and
-% between Special VFR flights, when so prescribed.
-% \cite[Chapter 5.2]{doc4444}
+Along with transferring control over aircraft from one sector to another and applying standard operating procedures for take-off or landing is keeping air traffic separated one of the main duties of air traffic controller. Proper separation ensures security and eliminates risk of collision. \cite[Chapter 2]{order7110}
 
-% Separation should be achieved by one of the following:
-% \bitem
-% \item vertiacal - planes are assigned different cruising levels
+Vertical or horizontal separation must be provided for all flights in Class A and B airspaces, IFR flights in Class C, D and E airspaces and between IFR and VFR flights in Class C airspace. \cite[Chapter 5]{doc4444}
+
+The rules air traffic controllers use to keep aircraft separated are called separation minima. Separation can be achieved in two basic ways: vertical and horizontal. Their description follows.
+
+\subsection{Vertical}
+
+Vertical separation is reached when ATC controller assigns planes different cruising levels. Historically vertical separation minima were set to 1000 ft (10FL) below FL290 and 2000 ft above FL290. This was due to the fact that altimeter precision decreases with increasing altitude. Over time more precise altimeters and combination with other means of measuring aircraft altitude allowed to decrease the 2000 ft separation minima and introduce the Reduced vertical separation minima (RVSM) system. In the RVSM airspace the separation limit is 1000 ft up to FL410 and 2000 ft above this level. If the cruising altitude of two airplanes is greater or equal as the separation minima, the airplanes are considered as separated. \cite{aim}
+
+Other rules can be applied, often different flight levels are reserved for aircraft flying in certain direction. Example of such rule can be that eastbound flights (with heading 0$^{\circ}$ – 179$^{\circ}$) fly on even tenths flight levels (FL20, FL40 etc.) and westbound flights (with heading 180$^{\circ}$ – 359$^{\circ}$) fly on odd tenths (FL10, FL30 etc.).
+
+
+\subsection{Horizontal}
+\subsubsection{Longitudinal}
+\subsubsection{Lateral}
+
 % \item horizontal
 % 	\bitem
 % 	\item longitudinal - interval between planes flying on the same (converging, reciprocal) is maintained
@@ -80,30 +73,12 @@ This thesis focuses on Air Traffic Control and Air Traffic Flow Management in th
 % \eitem
 % \cite[Chapter 3.3]{doc4444}
 
-% \subsubsection{Vertical}
-% Reduced vertical separation minima
-% %doslovně
-% Minima
-% Within RVSM airspace 
-% 1000ft between FL290 and FL410 inclusive, and
-% 2000ft above this level
 
-% Within other airspace
-% 1000ft below FL290, and
-% 2000ft above FL290
-
-% IFR flight levely vyhrazené pro jednotlivé směry: liché desítky na východ (0$^{\circ}$-179$^{\circ}$), sudé na západ(180$^{\circ}$-359$^{\circ}$)
-
-% VFR flight levely končí pětkou
 
 % \subsubsection{Longitudinal}
 % 15/10/5 minut separace nad stejným bodem podle typu situace 
 % \cite[Chapter 5.4.2.2]{doc4444}
 
-% \subsection{Wake Turbulence Separation}
-% Its the air vortex formed behind every aircraft. It's size and strength depends on the parameters of the aircraft (size, mass, speed, wing configuration...). It's not visible and can be hazardous for the following aircraft.
-
-% Special attention is needed in light wind conditions, because the turbulence can remain for a considerable time and may drift to parallel runway or sink to the path of following aircraft.
 
 % \subsubsection{Minima (for procedural control?)}
 % For arriving MEDIUM aircraft after HEAVY: 2 minutes. LIGHT after HEAVY 3 minutes. \cite[Chapter 5.8.2]{doc4444}
@@ -125,27 +100,28 @@ This thesis focuses on Air Traffic Control and Air Traffic Flow Management in th
 % \eitem
 % \cite[Chapter 8.7.3]{doc4444}
 
-% \subsection{Holding}
-% Holding procedure is a predefined manouvre that keeps the aircraft in predetermined airspace while waiting for clearance. The procedure is the same for VFR and IFR flights.
-% Expected Approach Time (EAT) is the time when arriving aircraft leaves the holding fix in order to complete its approach for landing. Holding fix is a geographical location that serves as a reference point for holding procedure.
-% \cite[Chapter 6.5.8]{doc4444}
+\subsection{Wake Turbulence Separation}
 
-% Reasons for holding can be traffic congestion, delays at destination airport or aircraft problems.
+Wake turbulence is the air vortex formed behind every aircraft as it moves through the air. The strength and size of the vortex depends on the parameters of the aircraft (mass, size, speed, wing configuration, etc.). It's not visible and can cause hazardous situation for the following aircraft especially if it is smaller and lighter and therefore more susceptible to be affected by the vortex.
 
-% \begin{figure}[h]
-%     \centering
-%     \includegraphics[width=0.8\textwidth]{figures/holding.png}
-%     \caption{Holding pattern - \textcolor{red}{z prezentace 2011 ATM Lesson Plans/ATM 18 Holding% - překreslit!
-%     }}
-%     \label{fig:holding}
-% \end{figure}
-% \begin{figure}[h]
-%     \centering
-%     \includegraphics[width=0.8\textwidth]{figures/holding-entry.png}
-%     \caption{Entry procedures - \textcolor{red}{z prezentace 2011 ATM Lesson Plans/ATM 18 Holding% - překreslit!
-%     }}
-%     \label{fig:holding-entry}
-% \end{figure}
+Special alertness is needed in conditions with light wind, because the turbulence won't dissipate quickly and may drift to parallel runway or descend to lower altitude into path of following aircraft.
+
+\red{TODO}
+
+\section{Holding}
+
+Holding procedure is a predefined manoeuvre that keeps the aircraft in predetermined airspace while waiting for clearance. The procedure is the same for VFR and IFR flights. Holding fix is a geographical location that serves as a reference point for holding procedure. The pattern itself is defined by the holding fix, heading of the inbound leg and length of the pattern. \cite[Chapter 6]{doc4444} The pattern and some terms used for it's description are shown in Figure \ref{fig:holding}.
+
+Reasons for holding can be traffic congestion, delays at destination airport or aircraft problems.
+
+\red{TODO}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/holding.png}
+    \caption{Holding pattern with examples of entry}
+    \label{fig:holding}
+\end{figure}
 % %Doplnit popis jednotlivých entry procedures!
 
 % If the delay is expected, the aircraft should be notified as soon as possible and if practical advised to reduce speed in order to absorb the delay. The ACC is normally responsible for clearing the aircraft to the holding fix including the instruction for the holding procedure itself and EAT.\\
@@ -157,3 +133,6 @@ This thesis focuses on Air Traffic Control and Air Traffic Flow Management in th
 % \subsection{Hartsfield–Jackson Atlanta International Airport}
 % Hartsfield–Jackson Atlanta International Airport (ICAO code KATL) has been the world's busiest airport by passenger traffic since 1998 with more than 94 million passengers in 2013. It has also the most landings and take-offs since 2005. The airport has 207 domestic and international gates which is the most at any airport. \cite{atlanta}
 %  Proč zvolena pro testy Atlanta...
+
+
+\section{Miles In Trails}

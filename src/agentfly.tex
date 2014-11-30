@@ -1,14 +1,50 @@
 %!TEX root = index.tex
 \chapter{AgentFly}
 
-\section{Goal}
+The AgentFly system is a large-scale high-fidelity distributed multi-agent simulation software. \cite{agentfly-enroute} Its goal is in simulating en-route sector controllers. The simulation combines time-stepped and event-driven simulation approaches. \cite{agentfly-atm} The time-stepped simulation is used for simulating the environment, weather and movement of the planes in space. Default time step used in simulation is set to twelve seconds but can be changed. This allows for faster than real-time simulation. The event-driven approach is used for simulation of the deliberation and communication between pilots and air traffic controllers. These pilots and air traffic controllers are modelled as independent agents.
 
 \section{Air Traffic Model}
+
+The AgentFly's simulation model consists four types of agents: pilot, airplane, visualization and ATC. The airplane agents model the flight itself, it computes it's movement in space using the Base of Aircraft Data (BADA) which is a database of mathematical models that describe the behaviour and performance of modelled aircraft. \cite{bada} The visualization agents show the results of the simulation to the user. The air traffic itself is modelled using pilot and ATC agents.
+
 \subsection{Pilot}
+
+The aircraft in the simulation are operated by pilots who are modelled as pilot agents. Every flight is modelled by a single agent. These agents are event-driven and react to events sent from air traffic controllers. The pilot models the duration of performing the order by waiting for specified amount of time and then replying the ATC confirming the request has been processed and applied.
+
+The pilot agent maintains internal flight plan that contains future intentions and actions of the pilot and therefore describes the precise future flight path of the plane. It consists of waypoints defining the flight route which are connected with elements that describe how the airplane's position, altitude, speed and other characteristics change between the waypoints. When the pilot receives request from ATC, the agent applies the requested change to the flight plan and recomputes new flight states. If there are no instructions from the air traffic controller, the pilot just follows the precomputed flight plan.
+
+The pilot's flight plan uses GPS coordinate system to describe the movement of the plane because it corresponds to the real movement of the plane in 3D space.
+
 \subsection{Controller}
 \subsubsection{ATA}
 \subsubsection{RSide}
+
+\subsubsection{Workload}
+
+One of AgentFly's main goals is to be able to realistically model the workload of the air traffic controller while he/she performs the tasks needed to keep the traffic separated. This allows to test changes linked to implementing new control procedures in National Airspace System (NAS). Instead of running the simulation with humans (pilots and ATCs) the simulation can be done in AgentFly only, saving both time and expenses.
+
+The ATC's workload is modelled using the Multiple Resource Theory by Christopher D. Wickens, more specifically the workload model developed by McCracken and Aldrich who divide the resources to Visual, Cognitive, Auditory and Psychomotor (VCAP model). \cite{agentfly-enroute} The visual and auditory resources serve for input processing, cognitive resource describes how much internal information processing is required and the psychomotor component describes physical actions as output. The simulated ATC has pools of these resources and each task performed by the ATC requires some of them for specified amount of time (for example typing on keyboard uses psychomotor resource, listening to pilot radio uses auditory resource). No resource can be used by more than one tasks at any time, this means that the controller cannot for example listen to two things at once etc. Using this model the system can measure if the controller is able to process all necessary tasks on time or if the ATC is overloaded.
+
 \subsection{Communication}
-\subsection{Workload}
+%The agents communicate to one another using a sector radio. The sector radio is half duplex - everyone hears everything but only one agent can speak at the same time.
+
+
+
+\section{Visualization}
+AgentFly system contains modules for advanced 2D and 3D real-time visualization that allows user to monitor and interact with the process of simulation. The visualization is 
+implemented using \texttt{OperatorAgent}s. Every one of those agents represents one visualization window and can run on different machines in distributed environment. The information shown in \texttt{OperatorAgent} are shown using layers. Every layer is handled by \texttt{LayerProvider} that creates the representations of objects that will be rendered on the layer.
+
+Two types of windows are usually used in the system, one of them shows 3D model of the Earth and all simulated aircraft flying above the surface at given moment, this serves as a view of real-world situation. Second type of visualization is 2D representation of radar screen of a particular controlled sector. The radar screen shows the sector boundary, aircraft flying in and around the sector and plenty additional information like log of radar communication, graphs of controller workload etc. There are usually multiple radar windows shown for multiple sectors that are being controlled by the simulated ATC.
 
 \section{Used Units}
+% The AgentFly system uses two coordinate systems: GPS coordinate system and stereographic
+% coordinate system.
+% The GPS coordinate system is used to represent positions of aircraft, their flight waypoints
+% a fixes. The sectors are also represented in GPS coordinate system. The stereographic 
+% coordinate system is created by projection of spherical GPS positions on a plane. Each sector
+% in the AgentFly has its own stereographic projection of the world. The stereographic
+% coordinate system and the GPS coordinate system have one common point called projection
+% point. This projection point could be understood as position of sector radar in AgentFly
+% system. The stereographic projection displays sphere on the plane with several compromises.
+% E.g., when an aircraft is flying far away from the projection point, it is seemed as
+% turning even if flying straight or it is seemed to fly slower than it actually is.

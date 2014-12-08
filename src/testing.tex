@@ -11,20 +11,20 @@ This first test compares the performance of implemented scheduling algorithms. T
   \centering
 \begin{tabular}{ | l | c | r | r | }
 \hline
-Flight id	& Weight class	& \red{Time of appearance on screen} & Runway arrival time	\\
+Flight id	& Weight class	& Appearance on screen & Estimated arrival time	\\
 \hline
-01M	& MEDIUM	& 	& 42:30	\\
-02J	& JUMBO		& 	& 42:29	\\
-03J	& JUMBO		& 	& 44:15	\\
-04M	& MEDIUM	& 	& 44:49	\\
-05M	& MEDIUM	& 	& 46:30	\\
-06J	& JUMBO		& 	& 46:29	\\
-07J	& JUMBO		& 	& 48:15	\\
-08M	& MEDIUM	& 	& 48:49	\\
-09M	& MEDIUM	& 	& 50:30	\\
-10J	& JUMBO		& 	& 50:29	\\
-11J	& JUMBO		& 	& 52:15	\\
-12M	& MEDIUM	& 	& 52:49	\\
+01M	& MEDIUM	& 17:36	& 42:30	\\
+02J	& JUMBO		& 19:24	& 42:29	\\
+03J	& JUMBO		& 19:00	& 44:15	\\
+04M	& MEDIUM	& 22:00	& 44:49	\\
+05M	& MEDIUM	& 21:36	& 46:30	\\
+06J	& JUMBO		& 23:24	& 46:29	\\
+07J	& JUMBO		& 23:00	& 48:15	\\
+08M	& MEDIUM	& 26:00	& 48:49	\\
+09M	& MEDIUM	& 25:36	& 50:30	\\
+10J	& JUMBO		& 27:24	& 50:29	\\
+11J	& JUMBO		& 27:00	& 52:15	\\
+12M	& MEDIUM	& 30:00	& 52:49	\\
 \hline
 \end{tabular}
   \caption{The configuration of the first test scenario}
@@ -102,9 +102,13 @@ The number of replanned slots shown in Graph \ref{graph:1rwy-alternating-replann
 
 \subsection{Conclusion}
 
-\red{TODO}
+{\em Algorithm~1} isn't intended for real-world use and it's performance is irrelevant. {\em Algorithm~2} and {\em Algorithm~3} behave identically in this scenario providing usable results in every measured aspect with the main advantage being that previously planned slots are fixed and there is no need to update the pilots instruction when new plane flies in. {\em Algorithm~4v1} performs poorly and doesn't handle the alternating weight classes well. On the other hand, similar {\em Algorithm~4v2} that adds the local optimization of delay, gives good results not too far from optimal solution with low number of slots being replanned. {\em Algorithm~5v1–3} obviously give the optimal result in the categories they are optimizing for but can have inferior results in other categories (e.g. versions 1 and 3 for maximal delay). The fact that the algorithms strive for the optimum result also means that these algorithms tend to replan previous slots often causing high workload for the controller. This and their computational complexity makes them unusable in real-world application.
 
 \section{Real world flights on single runway}
+
+\red{TODO}
+
+\section{Estimation of route duration}
 
 \red{TODO}
 

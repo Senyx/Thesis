@@ -3,9 +3,35 @@
 
 \red{TODO: intro}
 
+\section{Estimation of route duration}
+
+The goal of the first test was to determine the duration of individual arrival routes. These durations are an a priori knowledge of the air traffic controller who uses it determine the approximate time of arrival for scheduling flights to runways. The durations of routes were not provided as part of the route description and therefore needed to be acquired experimentally.
+
+Out of 7832 flights going through Atlanta Air Route Traffic Control Center (ZTL) on 20th June 2013, 1319 flights arriving to Atlanta airport were filtered and run in the simulation. Two isolated runs were carried out, each one for one runway. The flights were launched separately one by one, STAR was applied by the TMA sector controller and the duration of flight on the route was measured. No scheduling, holding or diversion manoeuvres were applied.
+
+\begin{table}[h]
+  \centering
+\begin{tabular}{ | l | r | r | r | }
+\hline
+Route   & Number of flights & Average route duration [m]  & Accuracy margin [s] \\
+\hline
+SINCA $\rightarrow$ 8L & 238 & 27:35 & 11.531  \\
+FLCON $\rightarrow$ 8L & 390 & 25:55 & 10.678  \\
+LGC $\rightarrow$ 8L   & 303 & 19:59 & 6.562  \\
+RMG $\rightarrow$ 8L   & 348 & 17:21 & 6.969  \\
+\hline
+\end{tabular}
+  \caption{Results of estimation of routes duration}
+  \label{tab:route_duration}
+\end{table}
+
+For the first run to runway \texttt{8L}, out of the 1319 flights, 1279 run through with no problem and 40 ended prematurely and were removed from the results. The errors were mainly caused by inconsistencies in the available data. An example of such error can be that the planes flight starts according to the provided data too close to the sector border and proper hand-off can't be accomplished. \red{results of second run}
+
+From the measured durations average route duration was computed to be used as the estimate in further experiments. Also an accuracy margin was determined to describe the precision of the estimate. It was chosen so that at least 90\% of the test flights would arrive not sooner or later from the estimated duration. The resulting durations and accuracy margins are shown in Table \ref{tab:route_duration}.
+
 \section{Comparison of scheduling algorithms on single runway}
 
-This first test compares the performance of implemented scheduling algorithms. The scenario contains twelve flights with alternating weight class landing on one runway arriving in close succession. This scenario should be particularly demanding to be scheduled optimally because the alternation in weight classes make it sensitive to the order in which the slots are scheduled.
+This test compares the performance of implemented scheduling algorithms. The scenario contains twelve flights with alternating weight class landing on one runway arriving in close succession. This scenario should be particularly demanding to be scheduled optimally because the alternation in weight classes make it sensitive to the order in which the slots are scheduled.
 
 \begin{table}[h]
   \centering
@@ -27,7 +53,7 @@ Flight id	& Weight class	& Appearance on screen & Estimated arrival time	\\
 12M	& MEDIUM	& 30:00	& 52:49	\\
 \hline
 \end{tabular}
-  \caption{The configuration of the first test scenario}
+  \caption{Configuration of the test scenario}
   \label{tab:config1}
 \end{table}
 
@@ -108,9 +134,6 @@ The number of replanned slots shown in Graph \ref{graph:1rwy-alternating-replann
 
 \red{TODO}
 
-\section{Estimation of route duration}
-
-\red{TODO}
 
 %\section{Comparison To Real Air Traffic}
 %\section{Flight Duration}

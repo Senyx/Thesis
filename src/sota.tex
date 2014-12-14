@@ -3,10 +3,9 @@
 
 This chapter will provide basic introduction to the field of ATM (Air Traffic Management), starting with brief summary of the history of aviation and continuing with explanation of some basic terms and concepts that will be needed further.
 
-The Air Traffic Management is an umbrella term for three services provided in aviation: Air Traffic Control (ATC), Air Traffic Flow Management (ATFM) and Aeronautical Information Services (AIS). The responsibility of ATC is to keep aircraft safely separated at all times, be it in the air or on the ground. ATFM prevents congestion in busy areas by predicting and controlling the flow of future air traffic. AIS is responsible for distribution of aeronautical information that are needed to maintain safe, efficient and regular air traffic. These information can contain for example current whether situation or notification on potential hazards at specific locations. \cite{atm}
+The Air Traffic Management is an collective term for three services provided in aviation: Air Traffic Control (ATC), Air Traffic Flow Management (ATFM) and Aeronautical Information Services (AIS). The responsibility of ATC is to keep aircraft safely separated at all times, be it in the air or on the ground. ATFM prevents congestion in busy areas by predicting and controlling the flow of future air traffic. AIS is responsible for distribution of aeronautical information that are needed to maintain safe, efficient and regular air traffic. These information can contain for example current whether situation or notification on potential hazards at specific locations. \cite{atm}
 
 This thesis focuses on Air Traffic Control and Air Traffic Flow Management in the vicinity of airport. The presence of relevant information in given place at appropriate time is assumed and not addressed in this thesis.
-
 
 \input{history}
 
@@ -14,15 +13,14 @@ This thesis focuses on Air Traffic Control and Air Traffic Flow Management in th
 
 \input{flightplan}
 
-
-
-%\section{Airports}
-%\subsection{Ground}
-
 \section{Used Units}
+
+\red{TODO}
+
 \subsection{Altimetry}
 
-% \subsection{Altimetry}
+\red{TODO}
+
 % Výška nad mořem/terénem/tlak/potřeba referenční hladiny, závisí na teplotě=tlaku vzduchu
 
 % QNE - standardní nastavení - letí se podle flight levelů - výška od referenční hladiny 1013.2 hPa
@@ -53,56 +51,62 @@ Vertical separation is reached when ATC controller assigns planes different crui
 
 Other rules can be applied, often different flight levels are reserved for aircraft flying in certain direction. Example of such rule can be that eastbound flights (with heading 0$^{\circ}$ – 179$^{\circ}$) fly on even tenths flight levels (FL20, FL40 etc.) and westbound flights (with heading 180$^{\circ}$ – 359$^{\circ}$) fly on odd tenths (FL10, FL30 etc.).
 
-
 \subsection{Horizontal}
-\subsubsection{Longitudinal}
+
+If two aircraft fly in the same altitude, they must be separated horizontally. The separation can be either lateral or longitudinal. The separation can be achieved both with or without using radar. When the radar is available, the controller sees the position of the aircraft directly on the radar screen. Without radar procedural control must be used which means that the controller must rely on position updates from the pilots over radio.
+
 \subsubsection{Lateral}
 
-% \item horizontal
-% 	\bitem
-% 	\item longitudinal - interval between planes flying on the same (converging, reciprocal) is maintained
-% 	\item lateral - planes fly on different routes
-% 	\eitem
-% \item composite - combination of the above
-% \eitem
-% \cite[Chapter 3.3]{doc4444}
+Lateral separation presumes that the aircrafts follow different routes whose reserved airspace do not overlap. \cite[Chapter 7]{nolan} The width of the airway is 8NM. Aircraft are also considered laterally separated if holding over different fixes whose holding pattern airspace does not overlap. The lateral separation can be decreased to be less than 8NM in specified cases like two airplanes crossing ways over a fix flying in different directions.
 
+\subsubsection{Longitudinal}
 
+When two planes are flying along the same route or converging routes and are not separated vertically, they must use longitudinal separation. For the separation to be applied to two aircraft, both must fly in the same speed or the leading aircraft must fly faster than the following.
 
-% \subsubsection{Longitudinal}
-% 15/10/5 minut separace nad stejným bodem podle typu situace 
-% \cite[Chapter 5.4.2.2]{doc4444}
+The longitudinal separation can be defined as a time delay between when two aircraft fly over a specified position or as minimal distance between the aircraft in nautical miles (NM). The separation minima differ if the planes are flying on the same track, or on reciprocal or crossing tracks.
 
+For planes flying on the same track the basic separation minimum is 15 minutes, if the navigational aids allow for frequent position and speed updates the separation may be decreased to 10 minutes. If the preceding aircraft flies 20 kt or more faster than the following, the separation is 5 minutes, if the preceding aircraft flies more than 40 kt faster, the separation can be as low as 3 minutes. \cite[Chapter 5]{doc4444}
 
-% \subsubsection{Minima (for procedural control?)}
-% For arriving MEDIUM aircraft after HEAVY: 2 minutes. LIGHT after HEAVY 3 minutes. \cite[Chapter 5.8.2]{doc4444}
-% For departing LIGHT or MEDIUM aircraft after HEAVY: 2 minutes. LIGHT after MEDIUM 2 minutes. \cite[Chapter 5.8.3]{doc4444}
-% %A DALŠÍ VARIANTY... viz prezentace
+For airplanes on crossing paths the separation minimum is 15 minutes or 10 minutes if frequent position updates are available. The same applies for planes flying on the same track crossing paths vertically
 
-% \subsubsection{Minima (for surveillance control?)}
-% \bitem
-% \item Heavy - 136 tonne or more
-% \item Medium - 7-136 tonne
-% \item Light - 7 tonne or less
-% \eitem
-% For both arrival and departure of planes provided with surveillance service: (also enroute at the same altitude or less than 1000ft below or parallel runway separated by less than 2500ft)
-% \bitem
-% \item H after H: 4NM
-% \item M after H: 5NM
-% \item L after H: 6NM
-% \item L after M: 5NM
-% \eitem
-% \cite[Chapter 8.7.3]{doc4444}
+\subsection{Separation in terminal area}
 
-\subsection{Wake Turbulence Separation}
+In terminal area similar separation rules apply as in en-route sectors. The aircraft must be separated either vertically, laterally or longitudinally. Vertical separation is used for holding aircraft. STARs are defined in such way that aircraft flying along the routes are separated either laterally on the same altitude or vertically if the STARs cross. This way the separation of aircraft flying on different STARs is always ensured. Planes flying on the same STAR use longitudinal separation with reduced separation minima that reflect the possible hazard of wake turbulence.
+
+\subsubsection{Wake Turbulence Separation}
 
 Wake turbulence is the air vortex formed behind every aircraft as it moves through the air. The strength and size of the vortex depends on the parameters of the aircraft (mass, size, speed, wing configuration, etc.). It's not visible and can cause hazardous situation for the following aircraft especially if it is smaller and lighter and therefore more susceptible to be affected by the vortex.
 
 Special alertness is needed in conditions with light wind, because the turbulence won't dissipate quickly and may drift to parallel runway or descend to lower altitude into path of following aircraft.
 
-\red{TODO}
+ICAO specifies three categories of the aircraft based on their maximum certificated take-off mass as follows \cite[Chapter 4]{doc4444}:
+\bitem
+\item Heavy - 136 000 kg or more
+\item Medium - 7 000 – 136 000 kg
+\item Light - 7 000 kg or less
+\eitem
 
-\section{Holding}
+Super Heavy category is also used to provide separation behind very large aircraft like Airbus A380-800.
+
+\begin{table}[h]
+  \centering
+\begin{tabular}{|l|l|r|r|r|r|}
+\hline
+\multicolumn{2}{|c|}{}&	\multicolumn{4}{ c |}{Following aircraft}\\ \hline
+\multicolumn{2}{|c|}{}& Super Heavy  & Heavy  & Medium  & Light \\ \hline
+\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{Preceding}}}
+	& Super Heavy & 4 NM         & 6 NM   & 7 NM    & 8 NM  \\
+    & Heavy       & 4 NM         & 4 NM   & 5 NM    & 6 NM  \\
+    & Medium      & 4 NM         & 4 NM   & 4 NM    & 5 NM  \\ 
+    & Light       & 4 NM         & 4 NM   & 4 NM    & 4 NM  \\ \hline
+\end{tabular}
+  \caption{Wake separation minima \cite[Chapter 7]{aim}}
+  \label{tab:wake_separation}
+\end{table}
+
+Table \ref{tab:wake_separation} shows the separation minima used for aircraft following behind another aircraft at the same altitude or less than 1000ft when both aircraft are using the same runway or parallel runways separated by less than 2500ft.
+
+\section{Holding pattern}
 
 Holding procedure is a predefined manoeuvre that keeps the aircraft in predetermined airspace while waiting for clearance. The procedure is the same for VFR and IFR flights. Holding fix is a geographical location that serves as a reference point for holding procedure. The pattern itself is defined by the holding fix, heading of the inbound leg and length of the pattern. \cite[Chapter 6]{doc4444} The pattern and some terms used for it's description are shown in Figure \ref{fig:holding}.
 

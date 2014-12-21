@@ -7,25 +7,34 @@
 
 The goal of the first test was to determine the duration of individual arrival routes. These durations are an a priori knowledge of the air traffic controller who uses it determine the approximate time of arrival for scheduling flights to runways. The durations of routes were not provided as part of the route description and therefore needed to be acquired experimentally.
 
-Out of 7832 flights going through Atlanta Air Route Traffic Control Center (ZTL) on 20th June 2013, 1319 flights arriving to Atlanta airport were filtered and run in the simulation. Two isolated runs were carried out, each one for one runway. The flights were launched separately one by one, STAR was applied by the TMA sector controller and the duration of flight on the route was measured. No scheduling, holding or diversion manoeuvres were applied.
+Out of 7832 flights going through Atlanta Air Route Traffic Control Center (ZTL) on 20th June 2013, 1319 flights arriving to Atlanta airport were filtered and run in the simulation. Three isolated runs were carried out in order to fly with all available aircraft through all applicable routes. The flights were launched separately one by one, STAR was applied by the TMA sector controller and the duration of flight on the route was measured. No scheduling, holding or diversion manoeuvres were applied.
 
 \begin{table}[h]
   \centering
 \begin{tabular}{ | l | r | r | r | }
 \hline
-Route   & Number of flights & Average route duration [m]  & Accuracy margin [s] \\
+Route   & \# flights & Avg. route duration [m]  & Accuracy margin [s] \\
 \hline
-SINCA $\rightarrow$ 8L & 238 & 27:35 & 11.531  \\
-FLCON $\rightarrow$ 8L & 390 & 25:55 & 10.678  \\
+SINCA $\rightarrow$ 8L                & 238 & 27:35 & 11.531  \\
+SINCA $\xrightarrow{AFTER\_FOGOG}$ 9R & 238 & 24:46 & 11.493  \\
+SINCA $\xrightarrow{AFTER\_NOFIV}$ 9R & 238 & 27:42 & 11.442  \\
+
+FLCON $\rightarrow$ 8L                & 391 & 25:55 & 10.678  \\
+FLCON $\xrightarrow{AFTER\_FOGOG}$ 9R & 391 & 28:44 & 10.505  \\
+FLCON $\xrightarrow{AFTER\_NOFIV}$ 9R & 391 & 26:02 & 10.568  \\
+
 LGC $\rightarrow$ 8L   & 303 & 19:59 & 6.562  \\
-RMG $\rightarrow$ 8L   & 348 & 17:21 & 6.969  \\
+LGC $\rightarrow$ 9R   & 303 & 19:27 & 6.580  \\
+
+RMG $\rightarrow$ 8L   & 353 & 17:21 & 6.969  \\
+RMG $\rightarrow$ 9R   & 353 & 17:26 & 6.887  \\
 \hline
 \end{tabular}
   \caption{Results of estimation of routes duration}
   \label{tab:route_duration}
 \end{table}
 
-For the first run to runway \texttt{8L}, out of the 1319 flights, 1279 run through with no problem and 40 ended prematurely and were removed from the results. The errors were mainly caused by inconsistencies in the available data. An example of such error can be that the planes flight starts according to the provided data too close to the sector border and proper hand-off can't be accomplished. \red{results of second run}
+For each of the the first two runs to runway \texttt{8L} and \texttt{9R} 1316 flights were simulated, 1285 run through with no problem and 31 ended prematurely and were removed from the results. The errors were mainly caused by inconsistencies in the available data. An example of such error can be that the planes flight starts according to the provided data too close to the sector border and proper hand-off can't be accomplished. Last run simulated 639 flights through fixes \texttt{SINCA} and \texttt{FLCON} to runway \texttt{9R} with 629 planned correctly.
 
 From the measured durations average route duration was computed to be used as the estimate in further experiments. Also an accuracy margin was determined to describe the precision of the estimate. It was chosen so that at least 90\% of the test flights would arrive not sooner or later from the estimated duration. The resulting durations and accuracy margins are shown in Table \ref{tab:route_duration}.
 
@@ -132,8 +141,57 @@ The number of replanned slots shown in Graph \ref{graph:1rwy-alternating-replann
 
 \section{Real world flights on single runway}
 
+The next test compared implemented scheduling algorithms on real-world air traffic. The test scenario contained 764 flights going through ZTL Center on 20th June 2013 between 12:00 a.m. and 6:00 p.m. All flights were arriving to runway \texttt{8L} of Atlanta airport. Moreover the wake separation minima were increased to minimum of 4 NM \red{minutes?} to make the arrival slots bigger and therefore the arriving flow of traffic relatively denser.
+
+The flights were scheduled for approach using four algorithms. {\em Algorithm~1} was not used because it produces invalid plan with possible collisions. All three variants of {\em Algorithm~5} were also not used because their computational complexity makes them unsuitable for planning in real-world scenario with hundreds of flights.
+
+\begin{table}[h]
+  \centering
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+Scheduling algorithm & Makespan  & Maximal delay & Total delay & Updated slots \\
+\hline
+Algorithm 2   & 22:22:25  & 4:25:13 & 53d 16:08:22 & 0    \\
+Algorithm 3   & 22:20:12  & 4:23:00 & 52d 13:56:08 & 0    \\
+Algorithm 4v1 & 22:18:54  & 4:15:23 & 51d 21:34:16 & 2038 \\
+Algorithm 4v2 & 22:19:18  & 4:15:47 & 51d 21:42:57 & 2025 \\
+\hline
+\end{tabular}
+  \caption{Results of different scheduling algorithms for dense real-world traffic on single runway}
+  \label{tab:1rwy-real}
+\end{table}
+
+The results of the test are shown in Table \ref{tab:1rwy-real}. Because only the actual, final plan is studied in this case, only the results for entire plan with all slots are shown, not their progress during the planning.
+
+The lower bound on makespan given by {\em Algorithm~1} defined by the configuration of the test scenario is 18:05:23, no plan can be shorter than that. The actual plans were about 4 hours longer. The differences between the algorithms are small with the longest makespan no more than 4 minutes longer than the shortest.
+
+Differences between maximal delays of the schedules are slightly bigger with the interval between smallest and biggest value spanning 10 minutes. The values for both variants of {\em Algorithm~4} are virtually identical. In real-world scenario, delay of more than four hours would certainly cause the plane to deplete its fuel reserve and crash since the commercial flights are in usual conditions required to have 30 minutes reserve of fuel for holding at the destination airport.\cite[Chapter 4]{annex6} In this case the extreme value is caused by dense traffic, restricting the arrivals to a single runway and enlarging the wake turbulence separation minima to almost twice the usual value.
+
+The total delay results show how even small differences of the algorithms performance can have significant impact when large number of airplanes is affected. {\em Algorithm~4v1} generated schedule in which the total waiting time is 1 day 18 hours and 34 minutes smaller than in schedule made by {\em Algorithm~2}. More than 42 hours worth of fuel and passenger time is very significant saving. The results of both variants of {\em Algorithm~4} are again virtually same, the total delays differ only by 8 minutes and 41 second (less than 0.012\%).
+
+{\em Algorithm~2} and {\em 3} don't update slots once they're planned. The second version outperforms the first variant of {\em Algorithm~4} by 13 updated slots during the planning. The overall number of updates is fairly hight but with average 2.7 updates per plane not unrealistically demanding for the air traffic controller. Also with lower density of the traffic, this number would be lower.
+
+In conclusion, this test shows that all four algorithms produce similar and usable results in scenarios with high density real-world traffic. The best results were planned by {\em Algorithm~4v1}. On the other hand, results by {\em Algorithm~4v2} were nearly identical and this algorithm is more robust in situations with alternating weight classes of the arriving airplanes as shown in previous test. Therefore {\em Algorithm~4v2} was selected to be used in further tests for planning on multiple runways.
+
+\section{Planes with alternating weight class on multiple runways}
+
 \red{TODO}
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/2rwy-weight.png}
+    \caption{Result of planning with different algorithms on multiple runways}
+    \label{fig:2rwy-weight}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{graphs/2rwy-weights.pdf}
+    \caption{}
+    \label{graph:2rwy-weights}
+\end{figure}
+
+\section{Real world flights on multiple runways}
 
 %\section{Comparison To Real Air Traffic}
 %\section{Flight Duration}

@@ -1,6 +1,28 @@
 %!TEX root = index.tex
 \chapter{Introduction}
 
-\section{Motivation – Why is Air Traffic Simulation needed?}
-\section{Thesis goals}
-%plane aircraft airplane interchangably
+Aviation is the most time effective form of widely available means of long distance transportation. The amount of people and freight transported grows each year and is expected to continue growing in years to come. For example, in 2014 some 3.2 billion passengers used air transport, which is a 5\% increase compared to 2013, and this number is expected to reach over 6.4 billion by 2030. \cite{growth}
+
+The growth of air traffic brings increased demands on the capacity of airspace. One way to address this issue is to build bigger aircraft capable of carrying more passengers and cargo at once, but there are physical limits on the size of airplanes. Therefore the utilization of available airspace must be improved in order to increase its capacity. At the same time, the safety of air traffic must be ensured.
+
+The Federal Aviation Administration (FAA) of the United States in cooperation with International Civil Aviation Organization (ICAO) are working on new flight rules that would increase the capacity of airspace while still taking into account security restrictions, aircraft possibilities, workload of pilots and ground personnel and airport capacities.
+
+\section{Motivation – Why is Air Traffic Simulation Necessary?}
+
+The field of aviation is ever-evolving and the air traffic control needs to keep up with the changes, especially with the growing number of aircraft flying to and from large hub airports leading to congestion and potentially resulting in high fuel expenses for waiting airplanes or worse risk of mid-air collisions between aircraft. To accommodate the traffic the rules for its control must evolve with it.
+
+Air traffic simulation is used to test and evaluate any changes made to the rules of traffic control operation before their actual implementation in real world. Primarily the impact of the changes on security of the flights and workload of both pilots and ground controllers is observed. Testing changes in flight rules in real air traffic would be difficult and dangerous and therefore computer simulation of traffic is used.
+
+Simulations are carried out with air traffic controllers involved in the process controlling the simulated traffic. These simulations are called human in the loop (HITL) and are quite time consuming and expensive especially when they involve inter-sector cooperation and therefore require the presence of several human controllers at once.
+
+There is an effort to minimize the costs connected to HITL simulations by running the tests with computer simulated air traffic controllers first and possibly eliminating the changes in flight rules that didn't turn out promising before the costly HITL simulation. This approach can significantly reduce the time and financial demands of the testing leading to cheaper and faster implementation of new air traffic control rules. Ideally the computer simulation would be so precise and reliable that it would allow the HITL simulation to be eliminated overall.
+
+AgentFly system provides the capability to simulate civilian air traffic over United States including the simulation of air traffic controllers in en-route sectors and their workload while performing the control duties. These include keeping the aircraft separated from each other at any moment, handing control over the aircraft from one sector to another, keeping the aircraft on route to their final destination and controlling the flow of air traffic.
+
+\section{Thesis Goals}
+
+The goal of this thesis is to design and implement module for AgentFly system that will extend its capabilities with simulation of air traffic control in terminal area. First the procedures for controlled flight in the vicinity of airports are analyzed. Also the data needed for the simulation are gathered and analyzed.
+
+Then the air traffic controller module is implemented. The module provides the means for controlling aircraft in the approach phase of the flight. The controller schedules the incoming flights to available runways in an effort to land them quickly and safely. Several different scheduling algorithms are implemented each offering different approach for arranging the flights for landing. Also the current methods of simulating aircraft in the AgentFly system need to be extended to allow for simulation of the approach phase of the flight including two methods of delaying the flights before they can commence the final approach to runway. The first one is holding pattern that is used when the flight needs to be delayed by a greater amount of time. The second if horizontal diversion manoeuvre which delays the aircraft by a lesser amount of time by diverting the plane from its flight plan and therefore prolonging its route.
+
+Finally the different scheduling methods were tested in both specifically designed and real-world scenarios in order to determine their performance according to different criteria comparing their quality. The scheduling method demonstrating best results is then selected for future real-world simulation tasks.

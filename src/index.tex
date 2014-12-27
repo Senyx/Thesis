@@ -20,6 +20,7 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes, arrows, chains}
 \usepackage{multirow}
+\usepackage{multicol}
 \usepackage{amsmath}
 %\usepackage{caption}
 %\usepackage{subcaption}
@@ -42,12 +43,13 @@
 \newcommand\WorkTitle{Air Traffic Control Simulation in Terminal Area}
 \newcommand\FirstandFamilyName{Bc. Jan Straka}
 \newcommand\Supervisor{Mgr. Přemysl Volf, Ph.D}
-\newcommand\Department{Department of Computer Science}
+\newcommand\Department{\red{Department of Computer Science}}
 \newcommand\Faculty{Faculty of Electrical Engineering}
 \newcommand\University{Czech Technical University in Prague}
 \newcommand\labelSupervisor{Supervisor}
 \newcommand\labelStudProgram{Study Programme} 
 \newcommand\labelStudBranch{Field of Study}
+\newcommand\Date{January 5, 2015}
 \newcommand{\red}[1] {\textcolor{red}{#1}}
 
 \usepackage[
@@ -67,34 +69,36 @@ unicode=true,
 
 \coverpagestarts
 
-% \acknowledgements
-% \noindent
-% Zde můžete napsat své poděkování, pokud chcete a máte komu děkovat.
+\acknowledgements
+\noindent
+\red{Zde můžete napsat své poděkování, pokud chcete a máte komu děkovat.}
 
 
-% \declaration{In Prague on January 5, 2015}
+\declaration{In Prague on January 5, 2015}
 
  
-% \abstractpage
-% Translation of Czech abstract into English.
-% \vglue60mm
-% \noindent{\Huge \textbf{Abstrakt}}
-% \vskip 2.75\baselineskip
-% \noindent
-% Abstrakt práce by měl velmi stručně vystihovat její podstatu. Tedy čím se práce zabývá a co je jejím výsledkem/přínosem.
-% \noindent
-% Očekávají se cca 1 -- 2 odstavce, maximálně půl stránky.
+\abstractpage
+The aim of this thesis is to extend the multi-agent simulation software AgentFly with module adding the capability to simulate air traffic control in terminal area. First the air traffic control procedures in airspace near airports were analyzed and then the simulation module was designed to allow for configurable simulation of approach phase of the flight and scheduling arriving planes to runways using different planning algorithms. Then the simulation module was implemented and finally different scheduling methods were tested to determine the one providing best results for real-world simulation tasks.
+
+%The aim of this thesis is a design of a module of the multi-agent simulation AgentFly for a simulation of air traffic controllers of flight trajectories within en-route sectors. The goal of designed module is to model behaviour of the air traffic controller during selection of a suitable solution manoeuvre for a collision removal. The suitable solution is chosen by evaluation of a fully configurable penalty function. The output of this thesis is an implementation of a collision resolution module, which is able to model different behaviour of the air traffic controller in the en-route sectors.
+
+\vglue60mm
+\noindent{\Huge \textbf{Abstrakt}}
+\vskip 2.75\baselineskip
+\noindent
+\red{TODO: česky}
 
 
 \tableofcontents
-% \listoffigures
-% \listoftables
+\listoffigures
+\listoftables
 
 
 \mainbodystarts
 \normalfont
 \parskip=0.2\baselineskip plus 0.2\baselineskip minus 0.1\baselineskip
 
+\include{abbr}
 \include{introduction}
 \include{sota}
 \include{data}

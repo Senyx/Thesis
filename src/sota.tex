@@ -15,27 +15,17 @@ This thesis focuses on Air Traffic Control and Air Traffic Flow Management in th
 
 \section{Used Units}
 
-\red{TODO}
+Heading is the direction in which the plane's nose is pointing. It is measured in degrees in clockwise direction with $0 ^{\circ}$ being north, $90 ^{\circ}$ east, $180 ^{\circ}$ south and $270 ^{\circ}$ being west. Note that the direction of flight doesn't have to correspond to the plane's heading, this happens typically in situations with crosswind when the the heading must be adjusted according to the wind's direction and strength in order to achieve desired direction of flight.
+
+Distances are measured in nautical miles (NM) with 1 NM equal to 1.852 km.
+
+Speed is measured in knots (kt) with 1 kt being 1 NM per hour. Indicated airspeed is the actual reading from plane's instruments. Calibrated airspeed adjusts the value for instrument, installation and position errors. True airspeed describes the speed of the aircraft relative to the surrounding mass of air. At standard sea level conditions the calibrated airspeed and true airspeed are equal. Ground speed is the plane's speed relative to the ground instead of the air, as the air itself can be moving.
 
 \subsection{Altimetry}
 
-\red{TODO}
+Aircraft altitude is measured either in feet (ft) or in flight levels (FL). Flight level is defined by a specific barometric pressure and is expressed in hundreds of feet. The pressure is derived from the International standard sea-level pressure (1013.25 hPa) and therefore may not equal to the actual altitude. To determine the true altitude the pilot must know the atmospheric pressure at given space as the reading from the instruments depend on it. This value is provided by the air traffic control. The true altitude can be expressed either as altitude above sea level or above ground level, which value is used depends on agreement between pilot and air traffic controller.
 
-% Výška nad mořem/terénem/tlak/potřeba referenční hladiny, závisí na teplotě=tlaku vzduchu
-
-% QNE - standardní nastavení - letí se podle flight levelů - výška od referenční hladiny 1013.2 hPa
-% QNH - letí se podle nadmořské výšky, je to hodnota tlaku na daném místě (typicky letišti) který po zadaání do výškoměru vrací správnou nadmořskou výšku
-% QFE - výška nad povrchem země v daném místě - typicky u letiště
-
-
-% Transition altitude
-% The TA is the altitude at or below which the vertical position is expressed in terms of altitudes. The TA is established by the appropriate ATS authority.
-
-% Transition level (TL) is flight level just above the TA. Transition layer is the layer between TA and TL. It is prohibited to fly on the level that is in the transition layer.
-
-% When the plane is descending the pilot changes from QNE to QNH when passing TL. When climbing pilot changes from QNH to QNE on TA.
-
-% Řídící musí včas předat letadlu hodnotu QNH a TL.
+Because the altitudes measured in feet and in flight levels don't equal the vertical separation cannot be ensured between aircraft using different measuring method. Therefore a transitional altitude is established. Above this altitude the altitude is measured in flight levels which removes the necessity to update the local air pressure. Below the transitional altitude the true altitude is used, because precise altitude values are needed for takeoff and landing. The transition altitude and corresponding transition level are established by the air traffic control. Before crossing this altitude ground controller must provide the transitional altitude and local air pressure to the pilot. AgentFly currently uses altitudes derived from the International standard sea-level pressure.
 
 \section{Separation}
 
@@ -110,24 +100,43 @@ Table \ref{tab:wake_separation} shows the separation minima defined by FAA used 
 
 Holding procedure is a predefined manoeuvre that keeps the aircraft in predetermined airspace while waiting for clearance. The procedure is the same for VFR and IFR flights. Holding fix is a geographical location that serves as a reference point for holding procedure. The pattern itself is defined by the holding fix, heading of the inbound leg and length of the pattern. \cite[Chapter 6]{doc4444} The pattern and some terms used for it's description are shown in Figure \ref{fig:holding}.
 
-Reasons for holding can be traffic congestion, delays at destination airport or aircraft problems.
-
-\red{TODO}
-
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.9\textwidth]{figures/holding.png}
     \caption{Holding pattern with examples of entry}
     \label{fig:holding}
 \end{figure}
-% %Doplnit popis jednotlivých entry procedures!
 
-% If the delay is expected, the aircraft should be notified as soon as possible and if practical advised to reduce speed in order to absorb the delay. The ACC is normally responsible for clearing the aircraft to the holding fix including the instruction for the holding procedure itself and EAT.\\
-% The holding procedure (including the pattern etc.) is normally published beforehand. Otherwise ATC shall specify the details of the procedure. Normally the first arriving aircraft is at the lovest level and the following aircrafts at successively higher levels. Turbojet aircrafts can be held at higher levels in order to conserve fuel, but ther order must be retained.\\
-% Vertical separation is mantained amongst the aircrafts in the holding sequence. Vertical separation must be applied whenever other aircraft is within 5 minutes of the holding area.\cite[Chapter 6.5.5]{doc4444}
+Reasons for holding can be traffic congestion, delays at destination airport or aircraft problems.
 
-% The EAT should be established for aircrafts expected to be delayed for 10 minutes or more and transmitted to the aircraft as soon as practicable. It should be retransmitted if the updated EAT differs from the previous time by 5 minutes or more.\cite[Chapter 6.5.7]{doc4444}
+The holding procedure is usually published beforehand but ATC can specify the details of an ad hoc holding pattern if the situation calls for it. The turn direction is usually right, but left-hand turn holding patterns can be used if needed.
 
-\section{Diversion manoeuvre}
+Several planes can hold over the same holding fix, these airplanes must be separated vertically. Normally the airplane to arrive first holds on the lowest level with the following aircraft using successively higher levels. Jet aircraft can hold at higher levels to save fuel, but the order must be retained.\cite[Chapter 6]{doc4444}
+
+Maximum holding speeds are established by ICAO to keep the aircraft within the protected holding space. Aircraft can also have specific holding speed prescribed by the manufacturer. This speed is lower than typical cruising speed and is used in order to conserve fuel. The maximum speeds are defined as follows \cite[Section 6]{doc8168}:
+
+\begin{itemize}
+\item up to 14000 ft: 230 kt
+\item 14000 ft to 20000 ft: 240 kt
+\item 20000 ft to 34000 ft: 265 kt
+\item more than 34000 ft: 0.83 Mach
+\end{itemize}
+
+There are three different entry procedures for the holding pattern depending on in which direction the aircraft arrives to the holding fix. Direct entry is straight forward, the plane flies directly to the holding fix and turns outbound as soon as the holding fix is reached. In offset entry aircraft flies over the holding fix into the protected area and through the area and then turns back at the outbound end and continues the holding from there. In parallel entry the plane flies over the holding fix and continues parallel to the inbound leg on the non-holding side. At the outbound end the plane turns and continues back to the holding fix an holds from there. The entry procedures are indicated in Figure~\ref{fig:holding}.
+
+\section{Horizontal diversion manoeuvre}
+
+The horizontal diversion manoeuvre can be used either to keep separation between aircraft in collision avoidance or to extend the aircraft flight plan in order to postpone its arrival to given location (typically airport).
+
+The manoeuver is defined by the diversion angle, length of the diversion and return point. The ATC orders the pilot to divert to given magnetic heading and await further instruction. The pilot turns as soon as possible abandoning the current flight plan. When the plane reaches desired position, ATC orders the pilot to change direction back to a return point and resume flight on the original flight plan from the return point on.
+
+Figure \ref{fig:diversion} shows the representation of diversion manoeuvre in the ATC plan. The diversion is represented by the whole area of the shape as the precise times of the turn applications are uncertain before the pilot actually performs them. The ATC plan is updated and the area of uncertainty gets smaller as the flight progresses through the manoeuvre.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/classes.png}
+    \caption{\red{TODO: obrazek diversion manevru}}
+    \label{fig:diversion}
+\end{figure}
 
 %\section{Miles In Trails}

@@ -3,6 +3,16 @@
 
 \red{TODO}
 
+\section{Data Processing and Visualization}
+
+\subsection{Runway Plan Visualization}
+
+% autoposun, posuvnik, prekryv delayu, obecně pro libovnoé metody, runwaye, weight classes
+
+\subsection{Approach Routes}
+
+\subsection{Airplane Trails}
+
 \section{Scheduling}
 
 \red{TODO}
@@ -26,90 +36,175 @@
 
 
 
-% % -------------------------------------------------
-% % Set up a new layer for the debugging marks, and make sure it is on
-% % top
-% \pgfdeclarelayer{marx}
-% \pgfsetlayers{main,marx}
-% % A macro for marking coordinates (specific to the coordinate naming
-% % scheme used here). Swap the following 2 definitions to deactivate
-% % marks.
-% \providecommand{\cmark}[2][]{%
-%   \begin{pgfonlayer}{marx}
-%     \node [nmark] at (c#2#1) {#2};
-%   \end{pgfonlayer}{marx}
-%   } 
-% \providecommand{\cmark}[2][]{\relax}
+\pgfdeclarelayer{marx}
+\pgfsetlayers{main,marx}
+
+\providecommand{\cmark}[2][]{\relax}
+\providecommand{\cmark}[2][]{
+  \begin{pgfonlayer}{marx}
+    \node [nmark] at (c#2#1) {#2};
+  \end{pgfonlayer}{marx}
+  } 
 
 
-% \begin{figure}[h]
-%     \centering
-% \begin{tikzpicture}[
-%     >=triangle 60,
-%     start chain=going below,
-%     node distance=6mm and 60mm,
-%     every join/.style={norm},
-%     ]
-% % ------------------------------------------------- 
-% % A few box styles 
-% % <on chain> *and* <on grid> reduce the need for manual relative
-% % positioning of nodes
-% \tikzset{
-%   base/.style={draw, on chain, on grid, align=center, minimum height=4ex},
-%   proc/.style={base, rectangle, text width=8em},
-%   test/.style={base, diamond, aspect=2, text width=5em},
-%   term/.style={proc, rounded corners},
-%   % coord node style is used for placing corners of connecting lines
-%   coord/.style={coordinate, on chain, on grid, node distance=6mm and 25mm},
-%   % nmark node style is used for coordinate debugging marks
-%   nmark/.style={draw, cyan, circle, font={\sffamily\bfseries}},
-%   % -------------------------------------------------
-%   % Connector line styles for different parts of the diagram
-%   norm/.style={->, draw, black},
-%   it/.style={font={\small\itshape}}
-% }
-% \node [term, join]      {New airplane on screen};
-% \node [proc, join]      {Filter applicable routes};
-% \node [test, join] (t1) {Multiple applicable routes?};
-% \node [proc, right=of t1]      {Open queue};
-% \node [proc, left=of t1]      {Dispatch message};
-% % No join for exits from test nodes - connections have more complex
-% % requirements
-% % We continue until all the blocks are positioned
-% \node [proc] (p2) {$k \mathbin{{-}{=}} 1$};
-% \node [proc, join] (p3) {Dispatch message};
-% \node [test, join] (t2) {Got msg?};
-% \node [test] (t3) {Capacity?};
-% \node [test] (t4) {$k \mathbin{{-}{=}} 1$};
-% % We position the next block explicitly as the first block in the
-% % second column.  The chain 'comes along with us'. The distance
-% % between columns has already been defined, so we don't need to
-% % specify it.
-% \node [proc, fill=black!25, right=of p1] (p4) {Reset congestion};
-% \node [proc, join=by norm] {Set \textsc{mq} wait flag};
-% \node [proc, join=by norm] (p5) {Dispatch message};
-% \node [test, join=by norm] (t5) {Got msg?};
-% \node [test] (t6) {Capacity?};
-% % Some more nodes specifically positioned (we could have avoided this,
-% % but try it and you'll see the result is ugly).
-% \node [test] (t7) [right=of t2] {$k \mathbin{{-}{=}} 1$};
-% \node [proc, fill=black!25, right=of t3] (p8) {Set congestion};
-% \node [proc, join=by norm, right=of t4] (p9) {Close queue};
-% \node [term, join] (p10) {Exit trigger message thread};
-% % -------------------------------------------------
-% % Now we place the coordinate nodes for the connectors with angles, or
-% % with annotations. We also mark them for debugging.
-% \node [coord, right=of t1] (c1)  {}; \cmark{1}   
-% \node [coord, right=of t3] (c3)  {}; \cmark{3}   
-% \node [coord, right=of t6] (c6)  {}; \cmark{6}   
-% \node [coord, right=of t7] (c7)  {}; \cmark{7}   
-% \node [coord, left=of t4]  (c4)  {}; \cmark{4}   
-% \node [coord, right=of t4] (c4r) {}; \cmark[r]{4}
-% \node [coord, left=of t7]  (c5)  {}; \cmark{5}   
-% \end{tikzpicture}
-%     \caption{Example of runway plan with colliding slots}
-%     \label{fig:TEST}
-% \end{figure}
+\begin{figure}[h]
+    \centering
+\begin{tikzpicture}[
+    >=triangle 60,
+    start chain=going below,
+    node distance=6mm and 53mm,
+    every join/.style={norm},
+    ]
+
+\tikzset{
+  base/.style={draw, on chain, on grid, align=center, minimum height=4ex},
+  proc/.style={base, rectangle, text width=9em},
+  test/.style={base, diamond, aspect=2, text width=5em},
+  term/.style={proc, rounded corners},
+  coord/.style={coordinate, on chain, on grid, node distance=6mm and 25mm},
+  nmark/.style={draw, cyan, circle, font={\sffamily\bfseries}},
+  norm/.style={->, draw, black},
+  it/.style={font={\small\itshape}}
+}
+\node [term, fill=green!20]	(t1)	{New airplane on screen};
+\node [proc, join]			{Filter applicable STARs};
+\node [proc, join]			{Schedule slot to all available runways};
+\node [proc, join]			{Find best runway and STAR combination};
+\node [term, join, fill=orange!25]{\ding{183} Apply selected STAR};
+\node [term, join, fill=orange!25]{\ding{182} Delay all updated slots};
+
+\node [term, fill=black!20]	{\ding{172} Delay all updated slots};
+\node [test, join]	(x4)	{Any slots left?};
+\node [term, fill=orange!25](t7){\ding{184} Match airplane sgPlan to arrival slot};
+\node [term, fill=orange!25](t8){\ding{108} Update runway plan visualization};
+
+\node [term, fill=green!20, right=of t1](t2){Airplane wants to entry TMA sector};
+\node [term, join, fill=orange!25]{\ding{184} Match airplane sgPlan to arrival slot};
+\node [test, join]	(x1)	{Applied any delay manoeuvre?};
+\node [test]		(x2)	{Applied diversion manoeuvre?};
+\node [test]		(x3)	{Applied holding in sector?};
+\node [proc]		(t3)	{Reject entry, apply holding first};
+
+\node [proc, right=of x1](t4){Approve entry};
+\node [proc, right=of x2](t5){Approve entry, apply diversion in TMA};
+\node [proc, right=of x3](t6){Approve entry, apply holding in TMA};
+
+\node [term, right=of t3, fill=orange!25](t9){\ding{182} Delay all updated slots};
+
+\node [term, fill=green!20, right=of t2]	{Airplane landed};
+\node [proc, join]			{Remove slot from runway plan};
+\node [term, join, fill=orange!25]{\ding{108} Update runway plan visualization};
+
+\node [coord, right=of x1]	(c1) {}; \cmark{1}
+\node [coord, right=of x2]	(c2) {}; \cmark{2}
+\node [coord, right=of x3]	(c3) {}; \cmark{3}
+\node [coord, left=of x4]	(c4) {}; \cmark{4}
+\node [coord, right=of t5]	(c5) {}; \cmark{5}
+\node [coord, left=of t8]	(c6) {}; \cmark{6}
+\node [coord, right=of x4]	(c7) {}; \cmark{7}
+\node [coord, right=of t4]	(c8) {}; \cmark{8}
+\node [coord, right=of t6]	(c9) {}; \cmark{9}
+
+\node [coord, right=of t9]	(cb) {}; \cmark{b}
+
+\path (x4.south) to node [near start, xshift=1em] {yes} (t7);
+	\draw [*->,black] (x4.south) -- (t7);
+
+\path (x1.south) to node [near start, xshift=1em] {yes} (x2);
+	\draw [*->,black] (x1.south) -- (x2);
+\path (x2.south) to node [near start, xshift=1em] {no} (x3);
+	\draw [o->,black] (x2.south) -- (x3);
+\path (x3.south) to node [near start, xshift=2.2em] {en-route} (t3);
+	\draw [*->,black] (x3.south) -- (t3);
+
+\path (x1.east) to node [near start, yshift=1em] {no} (c1); 
+	\draw [o->,black] (x1.east) -- (t4);
+\path (x2.east) to node [near start, yshift=1em] {yes} (c2); 
+	\draw [*->,black] (x2.east) -- (t5);
+\path (x3.east) to node [near start, yshift=1em] {TMA} (c3); 
+	\draw [*->,black] (x3.east) -- (t6);
+
+
+\path (x4.west) to node [near start, yshift=1em] {no} (c4); 
+	\draw [o->,black] (x4.west) -- (c4) -- (c6) -- (t8);
+\draw [->,black] (t7.east) -| (c7) -- (x4);
+\draw [->,black] (t6.east) -- (c9) -- (cb) -- (t9);
+\draw [->,black] (t3.east) -- (t9);
+\draw [->,black] (t4.east) -- (c8) -- (c5);
+\draw [->,black] (t5.east) -- (c5) -- (c9);
+
+\end{tikzpicture}
+    \caption{\red{Example of runway plan with colliding slots}}
+    \label{fig:TEST}
+\end{figure}
+
+
+\begin{figure}[h]
+    \centering
+\makebox[\textwidth][c]{
+\begin{tikzpicture}[
+    >=triangle 60,
+    start chain=going below,
+    node distance=6mm and 53mm,
+    every join/.style={norm},
+    ]
+
+\tikzset{
+  base/.style={draw, on chain, on grid, align=center, minimum height=4ex},
+  proc/.style={base, rectangle, text width=9em},
+  test/.style={base, diamond, aspect=2, text width=5em},
+  term/.style={proc, rounded corners},
+  coord/.style={coordinate, on chain, on grid, node distance=6mm and 25mm},
+  nmark/.style={draw, cyan, circle, font={\sffamily\bfseries}},
+  norm/.style={->, draw, black},
+  it/.style={font={\small\itshape}}
+}
+
+\node [term, fill=black!20]	(t0)	{\ding{183} Apply selected STAR};
+\node [test, join]			(x4)	{Sector the plane is in?};
+\node [proc]				(t2)	{Order pilot to apply STAR through radio};
+\node [proc]				(t3)	{Contact enroute ATC through landline};
+
+\node [term, fill=black!20, right=of t0]{\ding{184} Match airplane sgPlan to arrival slot};
+\node [test, join]			(x1)	{Plane enter(ed/ing) sector?};
+\node [test]				(x2)	{Update slot/delay flight?};
+\node [test]				(x3)	{Delay size};
+\node [proc]				(t1)	{Apply holding pattern};
+
+\node [proc, right=of x1]	(u1)	{Wait for plane entry};
+\node [proc, right=of x2]	(u2)	{Update slot in runway plan};
+\node [proc, right=of x3]	(u3)	{Apply diversion manoeuvre};
+
+\node [coord, right=of x1]	(c1)	{}; \cmark{1}
+\node [coord, right=of x2]	(c2)	{}; \cmark{2}
+\node [coord, right=of x3]	(c3)	{}; \cmark{3}
+\node [coord, left=of x4]	(c4)	{}; \cmark{4}
+\node [coord, left=of t3]	(c5)	{}; \cmark{5}
+
+\path (x1.south) to node [near start, xshift=1em] {yes} (x2);
+	\draw [*->,black] (x1.south) -- (x2);
+\path (x1.east) to node [near start, yshift=1em] {no} (c1); 
+	\draw [o->,black] (x1.east) -- (u1);
+
+\path (x2.south) to node [near start, xshift=2.8em] {delay flight} (x3);
+	\draw [*->,black] (x2.south) -- (x3);
+\path (x2.east) to node [near start, yshift=1em, xshift=0.5em] {update} (c2); 
+	\draw [*->,black] (x2.east) -- (u2);
+
+\path (x3.south) to node [near start, xshift=2.3em] {$d \geq 3$min} (t1);
+	\draw [*->,black] (x3.south) -- (t1);
+\path (x3.east) to node [near start, yshift=1em, xshift=0.6em] {$d > 3$min} (c3); 
+	\draw [*->,black] (x3.east) -- (u3);
+
+\path (x4.south) to node [near start, xshift=1.5em] {TMA} (t2);
+	\draw [*->,black] (x4.south) -- (t2);
+\path (x4.west) to node [near start, yshift=1em, xshift=-0.6em] {en-route} (c4); 
+	\draw [*->,black] (x4.west) -- (c4) -- (c5) -- (t3);
+
+\end{tikzpicture}}
+    \caption{\red{Example of runway plan with colliding slots}}
+    \label{fig:TEST2}
+\end{figure}
 
 % \begin{tikzpicture}[%
 %     >=triangle 60,              % Nice arrows; your taste may be different
@@ -241,8 +336,6 @@
 \subsection{Vectoring}
 \subsection{Holding Pattern}
 \subsection{Miles In Trails}
-
-\section{Runway Plan Visualization}
 
 % přivádím až k letišti ale poslední úsek jen tak nahrubo, pak ho odřídí tower
 

@@ -16,10 +16,25 @@
 % není preempce 
 %nejde nám o optimální řešení ale good enough které se podobá reálnému řídícímu
 
+%definice ETA, EETA (earliest), DETA (delayed eta
+%uvod ze ted bude vysvetleni jak vypada plan a potom prehled jednotlivych planovacich metod
+
+
+\section{Runway Plan Visualization}
+
+Runway Plan Visualization module was designed to provide the ATC controller representation of the runway plan that is quick and easy to comprehend. The slots planned for approach are displayed horizontally with a timeline at the bottom with highlighted one and five minute marks.
+
+Above the timeline there are rows representing individual runway plans. Headline of each runway plan is shown on the left side with the number of the runway on the top and names of every weight class in corresponding color shown below. Plans of different runways planned by the same algorithm are divided by gray dashed border. Plans of different runways planned by different algorithms are divided by solid black border.
+
+Each slot in the plan is represented by a vertical green bar with a dark green line in it. The dark green line shows the exact time of expected arrival to the runway and the green bar surrounding it shows the interval of possible arrival as defined by the precision of arrival estimation. Flight ID is shown on the top, the color of the text indicates the weight class of the aircraft. Below the flight ID, gray wake turbulence intervals are shown for every weight class in the same order as in the plan headline. If the wake turbulence interval is active (there is an following airplane scheduled after the current slot), the corresponding interval is colored in the color of following airplane's weight class.
+
+If there is a collision between the slots, active wake turbulence interval of the preceding slot and the slot itself of the following flight are shown in red color. If a slot is delayed, vertical orange line marks the time of original ETA and is connected to the delayed ETA with horizontal orange line. In multi-runway scenarios, earliest ETA among all runways is marked by dotted orange line and is again connected with the delayed ETA with horizontal dotted line. This way the controller can distinguish which part of the delay is caused by the order of slot on the runway and which part of the delay is the runway selection responsible for.
+
 \section{Slot Selection}
 
 \red{TODO}
 % pokud vede z aktuální pozice jen jedna star, tak stačí plánovat na jedné rwy:
+%zminit, že lze planovat více algoritmy a porovnávat jejich výstup
 
 \subsection{Algorithm 1}
 

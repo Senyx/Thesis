@@ -5,36 +5,41 @@
 
 \section{Data Processing and Visualization}
 
+\red{TODO}
+
 \subsection{Runway Plan Visualization}
 
-% autoposun, posuvnik, prekryv delayu, obecně pro libovnoé metody, runwaye, weight classes
+The visualization of runway plans is implemented in \texttt{RunwayPlanVisualModule} and its inner class \texttt{GraphicRunwayPlan}. \texttt{VisualModule}s are used in AgentFly to display additional information on controllers radar screen. When the runway plans are updated by the simulated ATC controller, \texttt{RunwayPlanVisualModule} converts the updated plans to their graphical representation described by instances of \texttt{GraphicRunwayPlan} and draws them on the radar screen.
+
+The implementation of visualization is general and can display plans for any number of runways created by any number of planning algorithms. There is a scrollbar at the bottom of the visualization window that allows plans that are longer than viewport to be shown. The visual output is described in \ref{section:runway-visualization}.
 
 \subsection{Approach Routes}
 
+Approach routes (STARs) are provided in proprietary formatted CSV file. The routes are defined by short segments and links connecting those segments. \texttt{ApproachRoutes\-Csv\-ScenarioPlayer} reads the route definitions, creates their representation and publishes them using \texttt{SharedObjectHolder} so that they can be used through the whole simulation.
+
+The routes are stored in a data structure \texttt{ApproachRoutesData} that allows the routes to be found according to their star fix or the runway they're leading to. The routes themselves are represented by \texttt{ApproachRoute}. Each route contains information about runway it leads to, individual waypoints on the route, defined holding patterns along the route and estimated route duration and accuracy interval of the estimation. Waypoints are represented by \texttt{ApproachRouteWaypoint} defining the waypoint's name, position and altitude and speed interval passing planes must fit in.
+
+Rendering of the approach routes in real-world 3D visualization is provided by \texttt{Approach\-Routes\-LayerProvider}. It can show either only the routes, or routes with waypoint names or complete route information with the altitude and speed intervals. The output of the visualization is shown in Figure \ref{fig:routes}.
+
+\subsection{Wake Turbulence Separation Intervals}
+
+Wake turbulence separation intervals are provided in a text file. This data file is processed by \texttt{WakeTurbulenceDataScenarioPlayer} and shared with the simulation environment through \texttt{SharedObjectHolder}. The data are stored in \texttt{WakeTurbulenceData} which provides methods that return the separation given the wight classes of the preceding and following airplanes.
+
 \subsection{Airplane Trails}
+
+\texttt{AirplaneTrailLayerProvider} serves as additional visual aid that allows the user to easily analyze the course of the aircraft's flight. It subscribes to aircrafts' position updates and gradually draws a line through all of them. After the plane lands entire trail of the flight is shown in the real-world simulation window. The number of trails shown on screen after their airplanes landed can be set through configuration file.
 
 \section{Scheduling}
 
-\red{TODO}
+The TMA air traffic controller's behavior is implemented in module \texttt{EomAtaStarApplication}. The module keeps an internal plan of which plane is scheduled to land on which runway at which time. When a new plane appears on the sector radar screen, the landing is scheduled and the pilot is commanded to use selected STAR for approach. Then the controller monitors the progress of the flight and either updates the plan to correspond with the reality or orders the pilot to perform such manoeuvres to arrive to the runway at prescribed time. The following section describes the process of approach scheduling. See the corresponding flowchart in Figure \ref{fig:flowchart1}.
 
-% \begin{algorithm}[H]
-% \begin{algorithmic}
-% \renewcommand{\algorithmicrequire}{\textbf{Input:}}
-% \renewcommand{\algorithmicensure}{\textbf{Output:}}
+When a new plane appears on screen \texttt{EomAtaStarApplication} must select to which runway through which STAR the plane should be heading and create a new slot in the runway plan. First, all routes that the plane can take to the airport are filtered.
 
-% \Function{newAirplaneOnScreen}{plane}
-% 	\If{plane isn't heading to the airport}
-% 		\State \Return
-% 	\EndIf
-% 	\State \red{todo}
-% \EndFunction
-% \end{algorithmic}
-% \caption{Processing new airplane on screen}
-% \label{alg1}
-% \end{algorithm}
+\subsection{STAR Selection}
 
+There are several possible scenarios for the scheduling and STAR selection. If only single STAR is available, the situation is simple. Controller schedules the airplane to land on the runway the STAR leads to using one of the algorithms described in \ref{section:slot-selection} and orders the pilot to use the STAR for approach.
 
-
+If there are several STARS leading to different runways, controller must select one first. This is done using one of the multi-runway scheduling algorithms described in \ref{section:runway-selection}.
 
 \pgfdeclarelayer{marx}
 \pgfsetlayers{main,marx}
@@ -46,8 +51,7 @@
   \end{pgfonlayer}{marx}
   } 
 
-
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
 \begin{tikzpicture}[
     >=triangle 60,
@@ -73,7 +77,7 @@
 \node [term, join, fill=orange!25]{\ding{183} Apply selected STAR};
 \node [term, join, fill=orange!25]{\ding{182} Delay all updated slots};
 
-\node [term, fill=black!20]	{\ding{172} Delay all updated slots};
+\node [term, fill=black!20]	{\ding{182} Delay all updated slots};
 \node [test, join]	(x4)	{Any slots left?};
 \node [term, fill=orange!25](t7){\ding{184} Match airplane sgPlan to arrival slot};
 \node [term, fill=orange!25](t8){\ding{108} Update runway plan visualization};
@@ -134,8 +138,9 @@
 \draw [->,black] (t5.east) -- (c5) -- (c9);
 
 \end{tikzpicture}
-    \caption{\red{Example of runway plan with colliding slots}}
-    \label{fig:TEST}
+    \caption{Flowchart showing simplified processes of ATC in TMA sector as implemented by \texttt{EomAtaStarApplication}.}
+    Algorithm entry points responding to events from the simulation framework are shown in green. Internal subroutines' entry points are shown in gray and the subroutine calls are orange. The flowchart continues in Figure \ref{fig:flowchart2}. The subroutine numbers don't represent order, they are only visual aid to match routine definition and call.
+    \label{fig:flowchart1}
 \end{figure}
 
 
@@ -191,9 +196,9 @@
 \path (x2.east) to node [near start, yshift=1em, xshift=0.5em] {update} (c2); 
 	\draw [*->,black] (x2.east) -- (u2);
 
-\path (x3.south) to node [near start, xshift=2.3em] {$d \geq 3$min} (t1);
+\path (x3.south) to node [near start, xshift=2.3em] {$d > 3$min} (t1);
 	\draw [*->,black] (x3.south) -- (t1);
-\path (x3.east) to node [near start, yshift=1em, xshift=0.6em] {$d > 3$min} (c3); 
+\path (x3.east) to node [near start, yshift=1em, xshift=0.6em] {$d \leq 3$min} (c3); 
 	\draw [*->,black] (x3.east) -- (u3);
 
 \path (x4.south) to node [near start, xshift=1.5em] {TMA} (t2);
@@ -202,183 +207,60 @@
 	\draw [*->,black] (x4.west) -- (c4) -- (c5) -- (t3);
 
 \end{tikzpicture}}
-    \caption{\red{Example of runway plan with colliding slots}}
-    \label{fig:TEST2}
+    \caption{Continuation of the flowchart showing simplified processes of ATC in TMA sector from Figure \ref{fig:flowchart1}.}
+    Internal subroutines' entry points are shown in gray.
+    \label{fig:flowchart2}
 \end{figure}
 
-% \begin{tikzpicture}[%
-%     >=triangle 60,              % Nice arrows; your taste may be different
-%     start chain=going below,    % General flow is top-to-bottom
-%     node distance=6mm and 60mm, % Global setup of box spacing
-%     every join/.style={norm},   % Default linetype for connecting boxes
-%     ]
-% % ------------------------------------------------- 
-% % A few box styles 
-% % <on chain> *and* <on grid> reduce the need for manual relative
-% % positioning of nodes
-% \tikzset{
-%   base/.style={draw, on chain, on grid, align=center, minimum height=4ex},
-%   proc/.style={base, rectangle, text width=8em},
-%   test/.style={base, diamond, aspect=2, text width=5em},
-%   term/.style={proc, rounded corners},
-%   % coord node style is used for placing corners of connecting lines
-%   coord/.style={coordinate, on chain, on grid, node distance=6mm and 25mm},
-%   % nmark node style is used for coordinate debugging marks
-%   nmark/.style={draw, cyan, circle, font={\sffamily\bfseries}},
-%   % -------------------------------------------------
-%   % Connector line styles for different parts of the diagram
-%   norm/.style={->, draw, black},
-%   it/.style={font={\small\itshape}}
-% }
-% % -------------------------------------------------
-% % Start by placing the nodes
-% \node [proc, densely dotted, it] (p0) {New trigger message thread};
-% % Use join to connect a node to the previous one 
-% \node [term, join]      {Trigger scheduler};
-% \node [proc, join] (p1) {Get quota $k > 1$};
-% \node [proc, join]      {Open queue};
-% \node [proc, join]      {Dispatch message};
-% \node [test, join] (t1) {Got msg?};
-% % No join for exits from test nodes - connections have more complex
-% % requirements
-% % We continue until all the blocks are positioned
-% \node [proc] (p2) {$k \mathbin{{-}{=}} 1$};
-% \node [proc, join] (p3) {Dispatch message};
-% \node [test, join] (t2) {Got msg?};
-% \node [test] (t3) {Capacity?};
-% \node [test] (t4) {$k \mathbin{{-}{=}} 1$};
-% % We position the next block explicitly as the first block in the
-% % second column.  The chain 'comes along with us'. The distance
-% % between columns has already been defined, so we don't need to
-% % specify it.
-% \node [proc, fill=black!25, right=of p1] (p4) {Reset congestion};
-% \node [proc, join=by norm] {Set \textsc{mq} wait flag};
-% \node [proc, join=by norm] (p5) {Dispatch message};
-% \node [test, join=by norm] (t5) {Got msg?};
-% \node [test] (t6) {Capacity?};
-% % Some more nodes specifically positioned (we could have avoided this,
-% % but try it and you'll see the result is ugly).
-% \node [test] (t7) [right=of t2] {$k \mathbin{{-}{=}} 1$};
-% \node [proc, fill=black!25, right=of t3] (p8) {Set congestion};
-% \node [proc, join=by norm, right=of t4] (p9) {Close queue};
-% \node [term, join] (p10) {Exit trigger message thread};
-% % -------------------------------------------------
-% % Now we place the coordinate nodes for the connectors with angles, or
-% % with annotations. We also mark them for debugging.
-% \node [coord, right=of t1] (c1)  {}; \cmark{1}   
-% \node [coord, right=of t3] (c3)  {}; \cmark{3}   
-% \node [coord, right=of t6] (c6)  {}; \cmark{6}   
-% \node [coord, right=of t7] (c7)  {}; \cmark{7}   
-% \node [coord, left=of t4]  (c4)  {}; \cmark{4}   
-% \node [coord, right=of t4] (c4r) {}; \cmark[r]{4}
-% \node [coord, left=of t7]  (c5)  {}; \cmark{5}   
-% % -------------------------------------------------
-% % A couple of boxes have annotations
-% \node [above=0mm of p4, it] {(Queue was empty)};
-% \node [above=0mm of p8, it] {(Queue was not empty)};
-% % -------------------------------------------------
-% % All the other connections come out of tests and need annotating
-% % First, the straight north-south connections. In each case, we first
-% % draw a path with a (consistently positioned) annotation node, then
-% % we draw the arrow itself.
-% \path (t1.south) to node [near start, xshift=1em] {$y$} (p2);
-%   \draw [*->,black] (t1.south) -- (p2);
-% \path (t2.south) to node [near start, xshift=1em] {$y$} (t3); 
-%   \draw [*->,black] (t2.south) -- (t3);
-% \path (t3.south) to node [near start, xshift=1em] {$y$} (t4); 
-%   \draw [*->,black] (t3.south) -- (t4);
-% \path (t5.south) to node [near start, xshift=1em] {$y$} (t6); 
-%   \draw [*->,black] (t5.south) -- (t6);
-% \path (t6.south) to node [near start, xshift=1em] {$y$} (t7); 
-%   \draw [*->,black] (t6.south) -- (t7); 
-% % ------------------------------------------------- 
-% % Now the straight east-west connections. To provide consistent
-% % positioning of the test exit annotations, we have positioned
-% % coordinates for the vertical part of the connectors. The annotation
-% % text is positioned on a path to the coordinate, and then the whole
-% % connector is drawn to its destination box.
-% \path (t3.east) to node [near start, yshift=1em] {$n$} (c3); 
-%   \draw [o->,black] (t3.east) -- (p8);
-% \path (t4.east) to node [yshift=-1em] {$k \leq 0$} (c4r); 
-%   \draw [o->,black] (t4.east) -- (p9);
-% % -------------------------------------------------
-% % Finally, the twisty connectors. Again, we place the annotation
-% % first, then draw the connector
-% \path (t1.east) to node [near start, yshift=1em] {$n$} (c1); 
-%   \draw [o->,black] (t1.east) -- (c1) -- (p4);
-% \path (t2.east) -| node [very near start, yshift=1em] {$n$} (c1); 
-%   \draw [o->,black] (t2.east) -| (c1);
-% \path (t4.west) to node [yshift=-1em] {$k>0$} (c4); 
-%   \draw [*->,black] (t4.west) -- (c4) -- (p3);
-% \path (t5.east) -| node [very near start, yshift=1em] {$n$} (c6); 
-%   \draw [o->,black] (t5.east) -| (c6); 
-% \path (t6.east) to node [near start, yshift=1em] {$n$} (c6); 
-%   \draw [o->,black] (t6.east) -| (c7); 
-% \path (t7.east) to node [yshift=-1em] {$k \leq 0$} (c7); 
-%   \draw [o->,black] (t7.east) -- (c7)  -- (p9);
-% \path (t7.west) to node [yshift=-1em] {$k>0$} (c5); 
-%   \draw [*->,black] (t7.west) -- (c5) -- (p5);
-% \end{tikzpicture}
+There are also cases where multiple routes lead to the same runway and the air traffic controller must decide which route to use. For example see Figure \ref{fig:routes}: airplane arriving from northeast through fix \texttt{FLCON} can land on runway \texttt{9R} flying along either route north of the airport or south of the airport.
 
+The decision is made as follows: when there are multiple routes to one runway arriving flight can take, the one with shortest estimated duration is used for planning. Then scheduling on multiple runways is performed as was described in \ref{section:runway-selection}. If the runway with multiple routes leading to it is selected to be used, deliberation on which of the routes to take is carried out. If the slot assigned to the arriving flight has a delay from the ETA of the shortest STAR (because the runway is busy with other flights at the moment) and the delayed ETA is bigger than that of another route with longer duration, this route is used instead of the shortest.
 
+This basically means that if the runway is free, the plane takes the shortest route, but if the flight needs to be delayed, the controller prefers that the plane takes a longer route to accommodate the delay rather than hold in one place and taking the short route. The plane needs to be delayed anyway and this way it at least doesn't occupy the holding pattern and instead flies along a different route.
 
+The plan of approaches of each runway is represented by an instance of \texttt{RunwayPlan}. It contains all scheduled slots on the runway and provides methods for new slot allocation based on the algorithms described in \ref{section:slot-selection} as well as methods that provide information for comparison of the plans for multi-runway scheduling. These return plan makespan, maximal delay among the planned slots, total delay of all planned slots etc. Slots are instances of \texttt{RunwaySlot} and hold flight ID, plane weight class, earliest ETA, target ETA, latest ETA and slot delay.
 
-
+%\FloatBarrier 
 
 \section{STAR Application}
-\subsection{Flight Plan update}
-\subsection{Clearances}
-\subsection{Speed}
 
-\section{TMA to Enroute Communication}
+When the approach is planned, the controller must advise the pilot which route he/she has to use for landing. First the controller determines in which sector the airplane is currently located (see Figure \ref{fig:flowchart2}). Typically this is one of the neighboring en-route sectors, but the airplane might also already be in the TMA sector. If the airplane is in en-route sector, the TMA controller sends event to en-route controller to contact the pilot through radio. If the plane is in the TMA sector, the controller contacts the pilot directly.
+
+The radio communication is provided by \texttt{EomRSideStarApplication} module. The module arranges for the whole process including for the communication itself, delay of the communication, repeated transmissions if the previous tries failed and displaying the message in radio communication window on the radar screen. The message transmitted through radio is represented by \texttt{StarApplicationData}.
+
+\subsection{Flight Plan Update}
+
+On the pilot's side, the radio message is received by module \texttt{EomPilotStarApplication} which applies the STAR to its current flight plan that is represented by \texttt{GpsFlightPlan\-WrapperPolyline}. The flight plan wrapper was extended so it can apply the whole STAR with single replanning. First a common waypoint of current flight plan route and applied STAR is found and the STAR is appended to the flight plan after the common waypoint replacing the original route. Then a list of clearances is created, with required altitudes and speeds at fixes along the STAR. Finally, flight plan is replanned  through the added STAR with restrictions defined by the clearances using BADA model of the plane's behavior.
+
+When the STAR is applied, \texttt{EomAtaStarApplication} gathers all slots that have been updated during the scheduling, including the newly added slot, and ensures that each slot matches the estimated arrival according to the current airplane sgPlan. The process is shown in Figure \ref{fig:flowchart1}. The sgPlan represents the airplane not from the pilots view, but from the controllers perspective. While doing so, more slots can be updated and the process continues until all slots and sgPlans match. When the matching is done, visualization of runway plans is updated.
+
+\section{Sector Entry Check}
+
+Sector entry check is a process that takes place before the hand-off of an airplane to new sector is performed. At this time the plane's sgPlan is available for the first time. For TMA sector the entry check procedure is shown in figure \ref{fig:flowchart1} and works as follows:
+
+Since the sgPlan of plane in entry check is now known, the controller can match the sgPlan and planned slot. While doing so, more slots can be updated and the process continues until all slots and sgPlans match. When the matching is done, the result of matching of the entering airplane is examined. If no delay manoeuvre was performed and only the slot was updated, the entry is approved and hand-off will take place. If horizontal diversion manoeuvre was applied, the entry is approved and TMA controller waits till the plane crosses to TMA sector to perform the vectoring. If holding was applied before the plane crosses border to TMA sector, the entry is rejected and another entry check will take place once the airplane completes its holding in en-route sector and will be about to cross to TMA once again. If the holding pattern was applied after the plane crosses the border of TMA sector, entry is approved and airplane holds inside TMA.
 
 \section{Flow Control}
+
+The duty of the flow control is to make sure, that the airplanes will reach the runway during its assigned time slot. To do that, \texttt{EomAtaStarApplication} must either update the slot to match the sgPlan or delay the plane so the sgPlan will match the slot. The process is shown in Figure \ref{fig:flowchart2}.
+
+First, the controller checks whether the entry check took place and sgPlan is already available and if not, airplane wait for its entry.
+
+If the sgPlan is available, sgPlan arrival interval is determined and compared with the runway plan slot. If the sgPlan interval is smaller than the slot and fits inside it, the slot is shrunk not to occupy unnecessary time on the runway.
+
+If the sgPlan arrival interval is smaller than the runway slot and ends later (the estimated arrival was too optimistic), the slot is shifted later in time and shrunk to fit the arrival interval. This can lead to shifting of slots planned after the current one and these slots will have to be matched to their sgPlans after the matching of current slot is finished. The following slots can be only shifted further in time, the order of the slots is preserved.
+
+If the sgPlan arrival interval is bigger than runway slot and the slot ends sooner than the arrival interval, the slot is enlarged and shifted so it fits the arrival interval. Again, this may lead to the need to shift following slots in the runway plan.
+
+Finally if the sgPlan arrival interval starts sooner than the runway slot (the estimated arrival was pessimistic) no matter if the interval is bigger and smaller than the slot, the controller first tries to shift the slot back in time so it starts at the same time as the arrival interval. This is possible only if there is empty space in the runway plan before the slot. If there is no empty space or the slot can't be moved backwards all the way, the plane must be delayed so the sgPlan arrival interval would fit in the slot. Once the plane is delayed, the runway slot is shrunk or enlarged to fit the updated sgPlan arrival interval.
+
+If the plane needs to be delayed by more than three minutes, holding pattern is used, if the delay is smaller or equal than three minutes, horizontal diversion manoeuvre is used. The tree minute threshold is arbitrary and based on experience, and can be changed to different value. 
+
 \subsection{Vectoring}
+% diversion
+% application only to the sgplan, to the pilot once the plane crosses border, vectoring, říká v tu chvíli kdy provádí
 \subsection{Holding Pattern}
-\subsection{Miles In Trails}
 
-% přivádím až k letišti ale poslední úsek jen tak nahrubo, pak ho odřídí tower
+%airplane landed
 
-% přesnější popis zadání - so teda chci dosáhnout
-
-% Class B airspace Around atlanta
-% vytvořeno z dostupných informací - popsat tam slovně ten tvar?
-% obrázky
-% vnější obvod aby seděl na dané sektory
-% informace o update tvaru
-
-% první update:
-% http://www.dot.ga.gov/localgovernment/intermodalprograms/aviation/documents/classbpresentationshowformat.pdf
-% http://proofofright.files.wordpress.com/2011/07/atl-class-b1.jpg
-
-% druhý update:
-% http://web.co.dekalb.ga.us/pdkairport/pdf/AirspaceArticle.pdf
-% asi aktuální verze:
-% https://www.federalregister.gov/articles/2012/02/03/2012-2072/proposed-modification-of-the-atlanta-class-b-airspace-area-ga !!!!!!!!!!!!!!!!!!!!!
-
-% nejdřív zkoušení funkčnosti na doplňku, pak na class 2 airspace, protože pod ním se nacházejí další letiště (12, v okolí dalších 11) -> menší prostor -> komplikovanější
-
-
-
-% definice samotného letiště,
-% v tuhle chvíli stačí runwaye
-% podle
-% http://airnav.com/airport/KATL a http://155.178.201.160/d-tpp/1410/00026AD.PDF
-
-% dát tam samotný popis runwayí, obrázek konfigurace, co jsme vyignorovali (povrch, navádění atd.), screenshot z visia 
-
-
-
-
-
-% vytvoření nové konfigurace, vyfiltrování letů, které letí z/do/přes atlantu
-
-% popis výběru a napasování route na FP
-% jak se řeší napasování routy když jde souběžně ale po jiných fixech, viz ASQ5502_798
-
-
-% eventy, skenování, radio, přeplánování, update fpi a horizontálního plánu
-
-% porovnání s online schedullingem, kde můžou tasky čekat dokud se procesor neuvolní, ale tady se musí vykonávat od začátku, protože jinak letadlo spadne
-
-% generování volných slotů: co nejdřívější, bere se ohled na nepřesnost odhadu ETA a marginy na obou stranách, z nichž má přednost ten delší
+%\subsection{Miles In Trails}

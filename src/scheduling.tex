@@ -18,9 +18,12 @@
 
 %definice ETA, EETA (earliest), DETA (delayed eta
 %uvod ze ted bude vysvetleni jak vypada plan a potom prehled jednotlivych planovacich metod
+% porovnání s online schedullingem, kde můžou tasky čekat dokud se procesor neuvolní, ale tady se musí vykonávat od začátku, protože jinak letadlo spadne
 
 
 \section{Runway Plan Visualization}
+
+\label{section:runway-visualization}
 
 Runway Plan Visualization module was designed to provide the ATC controller representation of the runway plan that is quick and easy to comprehend. The slots planned for approach are displayed horizontally with a timeline at the bottom with highlighted one and five minute marks.
 
@@ -31,6 +34,8 @@ Each slot in the plan is represented by a vertical green bar with a dark green l
 If there is a collision between the slots, active wake turbulence interval of the preceding slot and the slot itself of the following flight are shown in red color. If a slot is delayed, vertical orange line marks the time of original ETA and is connected to the delayed ETA with horizontal orange line. In multi-runway scenarios, earliest ETA among all runways is marked by dotted orange line and is again connected with the delayed ETA with horizontal dotted line. This way the controller can distinguish which part of the delay is caused by the order of slot on the runway and which part of the delay is the runway selection responsible for.
 
 \section{Slot Selection}
+
+\label{section:slot-selection}
 
 \red{TODO}
 % pokud vede z aktuální pozice jen jedna star, tak stačí plánovat na jedné rwy:
@@ -141,6 +146,8 @@ The previously mentioned restrictions limit the benefits of pruning and the algo
 
 \section{Runway Selection}
 
+\label{section:runway-selection}
+
 When the configuration of STARs and the airport allows the planes to land on one of several runways, the air traffic controller must not only decide on the order in which the airplanes land on the runway but also on which plane lands on which runway.
 
 The procedure for runway selection goes as follows: For every runway the arriving plane can land on, new plan is created incorporating the slot for the incoming aircraft. The plans are created using the single-runway algorithms introduced in previous section. Than all the created plans are compared using one of the criteria presented below, the optimal plan is used for the corresponding runway and other plans are thrown away and the runways keep their previous plans not containing the slot of the newly arriving plane.
@@ -150,11 +157,3 @@ First criterion used to compare runway plans is ETA of the new slot. The air tra
 Second criterion guides the airplane to the runway with the smallest makespan after the slot addition. This way the controller keeps all runways equally occupied because new airplane is always routed to the least occupied runway (that is to the one with smallest makespan).
 
 Third and fourth criteria for runway selection are total respectively maximal delay of all slots planned on the runway. The rationale for using these criteria is the same as for planning on single runway mentioned above.
-
-\section{STAR Selection}
-
-Apart from the situation where there are multiple STARs leading to multiple runways, there are also cases where there are multiple routes leading to the same runway leading to the same runway and the air traffic controller must decide which route to use. For example see Figure \red{routy okolo KATL} where airplane arriving from northeast through fix \texttt{FLCON} can land on runway \texttt{9R} flying along either route north of the airport or south of the airport.
-
-The decision is made as follows: when there are multiple routes to one runway arriving flight can take, the one with shortest estimated duration is used for planning. Then schedulling on multiple runways is performed the same way as was described above. If the runway with multiple routes leading to it is selected deliberation on which of the routes to take is carried out. If the slot assigned to the arriving flight has a delay from the ETA of the shortest STAR (because the runway is busy with other flights at the moment) and the delayed ETA is bigger than that of another route with longer duration, this route is used instead of the shortest.
-
-This basically means that if the runway is free, the plane takes the shortest route, but if the flight needs to be delayed, the controller preffers that the plane takes a longer route to take away from the delay rather than hold in one place and taking the short route. The plane needs to be delayed anyway and this way it at least doesn't occupy the holding pattern and instead flies along a different route.

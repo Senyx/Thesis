@@ -16,8 +16,16 @@ The pilot agent maintains internal flight plan that contains future intentions a
 The pilot's flight plan uses GPS coordinate system to describe the movement of the plane because it corresponds to the real movement of the plane in 3D space.
 
 \subsection{Controller}
+
+\red{TODO}
+
 \subsubsection{ATA}
+
+\red{TODO}
+
 \subsubsection{RSide}
+
+\red{TODO}
 
 \subsubsection{Workload}
 
@@ -26,6 +34,9 @@ One of AgentFly's main goals is to be able to realistically model the workload o
 The ATC's workload is modelled using the Multiple Resource Theory by Christopher D. Wickens, more specifically the workload model developed by McCracken and Aldrich who divide the resources to Visual, Cognitive, Auditory and Psychomotor (VCAP model). \cite{agentfly-enroute} The visual and auditory resources serve for input processing, cognitive resource describes how much internal information processing is required and the psychomotor component describes physical actions as output. The simulated ATC has pools of these resources and each task performed by the ATC requires some of them for specified amount of time (for example typing on keyboard uses psychomotor resource, listening to pilot radio uses auditory resource). No resource can be used by more than one tasks at any time, this means that the controller cannot for example listen to two things at once etc. Using this model the system can measure if the controller is able to process all necessary tasks on time or if the ATC is overloaded.
 
 \subsection{Communication}
+
+\red{TODO}
+
 %The agents communicate to one another using a sector radio. The sector radio is half duplex - everyone hears everything but only one agent can speak at the same time.
 
 
@@ -37,6 +48,9 @@ implemented using \texttt{OperatorAgent}s. Every one of those agents represents 
 Two types of windows are usually used in the system, one of them shows 3D model of the Earth and all simulated aircraft flying above the surface at given moment, this serves as a view of real-world situation. Second type of visualization is 2D representation of radar screen of a particular controlled sector. The radar screen shows the sector boundary, aircraft flying in and around the sector and plenty additional information like log of radar communication, graphs of controller workload etc. There are usually multiple radar windows shown for multiple sectors that are being controlled by the simulated ATC.
 
 \section{Used Units}
+
+\red{TODO}
+
 % The AgentFly system uses two coordinate systems: GPS coordinate system and stereographic
 % coordinate system.
 % The GPS coordinate system is used to represent positions of aircraft, their flight waypoints

@@ -1,3 +1,24 @@
 %!TEX root = index.tex
 \chapter{Conclusion}
-\section{Future work}
+
+The overall goals of this thesis were satisfied, the module simulating air traffic controller behavior was designed and implemented and series of evaluate experiments with real-world scenarios was conducted and evaluated and best performing algorithm combination was selected based on these experiments. This work accomplishes the individual goals as follows:
+
+\benum
+\item The duties of air traffic controller in terminal area and procedures for controlled flight in the vicinity of airports are studied in Chapter \ref{section:sota}.
+\item Data needed for implementation and evaluation were analyzed and acquired or experimentally estimated. The data acquisition is described Chapter \ref{section:data}
+\item Variety of algorithms that simulate the controller's deliberation on scheduling arriving flights to land on controlled airport was designed. Each algorithm offers different approach for arranging the flights for landing. The algorithms are described in Chapter \ref{section:scheduling}.
+\item The proposed scheduling algorithms were implemented as controller module in AgentFly simulation system. Also implemented methods of simulating aircraft were extended to allow for simulation of the approach phase of the flight. The implementation is described in Chapter \ref{section:implementation}.
+\item Series of experiments testing the different scheduling methods in both specifically designed and real-world scenarios was conducted in order to determine their performance according to different criteria. {\em Algorithm 3b – Keep Order of ETA With Local Optimization} for slot allocation together with runway selection based on {\em minimal scheduled arrival time} of the new slot were selected as best performing and robust combination for use in real-world simulation scenarios. Experiments are described in Chapter \ref{section:testing}.
+\eenum
+
+\section{Future Work}
+
+There are several areas in which the current work can be extended:
+\bitem
+\item The designed module for terminal air traffic control can be extended so it will take into account the configuration of STARs and their common segments during the arrival slot scheduling to prevent possible collisions on the shared parts of the routes. Current solution does detect these collisions and allows for their prevention by delaying one of the flights, but does not schedule the flights with this in mind. 
+\item Other additional information about the airport configuration can be employed to plan the arriving flights on airports cross or otherwise influence each other. The configuration of taxiways and the fact if they allow the arriving airplane to leave the runway at high speed may also have impact on the frequency in which the airport is able to accept arriving flights.
+\item The implementation of holding patterns can be extended so it would allow intelligent stacking of multiple airplanes on single holding pattern at different heights. The order of the airplanes, holding heights and speeds can be assigned in a way that would minimize the fuel consumption.
+\item Communication between the TMA and en-route sector controllers can be improved and extended. En-route sectors can provide information about arriving flights sooner than when they appear on the TMA radar screen leaving the TMA controller more time to schedule and manipulate the traffic to achieve better results. TMA can also compute parameters of the incoming traffic and provide the neighboring en-route sectors with dynamically generated parameters for Miles In Trails which would mean that the traffic entering TMA sector would already be optimally spaced and allow the TMA sector controller to schedule the flights easily and with unnecessary delays.
+\item Further, more detailed experiments on the impact of individual algorithms and other terminal control procedures on the controllers workload can be conducted to learn more about how the procedures used affect the TMA controller as well as the controllers of near en-route sectors.
+\item Additionally, the AgentFly simulation system can be extended with the capability to schedule and simulate flights taking of the same runway that is used for arrivals.
+\eitem

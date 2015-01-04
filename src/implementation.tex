@@ -1,6 +1,9 @@
 %!TEX root = index.tex
 \chapter{Implementation}
 
+\label{section:implementation}
+%Then the air traffic controller module is implemented. The module provides the means for controlling aircraft in the approach phase of the flight. The controller schedules the incoming flights to available runways in an effort to land them quickly and safely. Several different scheduling algorithms are implemented each offering different approach for arranging the flights for landing. Also the current methods of simulating aircraft in the AgentFly system need to be extended to allow for simulation of the approach phase of the flight including two methods of delaying the flights before they can commence the final approach to runway. The first one is holding pattern that is used when the flight needs to be delayed by a greater amount of time. The second if horizontal diversion manoeuvre which delays the aircraft by a lesser amount of time by diverting the plane from its flight plan and therefore prolonging its route.
+% cilem implementovat moduly ktere naplanuji prijezd aby se nepotkaly na letisti! a aplikovat tak aby tak letadla fakt letela
 \red{TODO}
 
 \section{Data Processing and Visualization}
@@ -257,10 +260,41 @@ Finally if the sgPlan arrival interval starts sooner than the runway slot (the e
 If the plane needs to be delayed by more than three minutes, holding pattern is used, if the delay is smaller or equal than three minutes, horizontal diversion manoeuvre is used. The tree minute threshold is arbitrary and based on experience, and can be changed to different value. 
 
 \subsection{Vectoring}
-% diversion
-% application only to the sgplan, to the pilot once the plane crosses border, vectoring, říká v tu chvíli kdy provádí
+
+Horizontal diversion manoeuvre is performed by \texttt{EomAtaVectoring} module using airplane vectoring. Unlike STAR or holding application, in which the controller tells the pilot what manoeuvre to use immediately ({\em``Hold 5 minutes at fix SINCA''} ) and the pilot incorporates them into his/hers flight plan and performs them at the right time and place, vectoring is performed by the pilot at the exact time he/she received the order through radio ({\em``Turn to heading 270 immediately''} ).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/diversion.png}
+    \caption{\red{popis a reference do textu}}
+    \label{fig:diversion-implementation}
+\end{figure}
+
+This means that the \texttt{EomAtaVectoring} module only computes the geometry of the manoeuvre (when and how much the plane must divert from its flight plan to achieve required delay) and applies it to the sgPlan. The vectoring itself (radio communication with the pilot) takes place later at the time the plane must divert. This is already implemented in AgentFly and used for example in collision avoidance.
+
 \subsection{Holding Pattern}
 
-%airplane landed
+If the holding pattern needs to be applied to delay the plane's arrival, the \texttt{EomAtaStar\-Application} first needs to decide which holding pattern to use. If there are any published holding patterns on the remaining part of STAR ahead of the plane, the one defined for earliest fix will be used to delay the airplane early on and not at the latest possible moment just before landing.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/hold.png}
+    \caption{\red{popis a reference do textu}}
+    \label{fig:holding-implementation}
+\end{figure}
+
+If there is no published holding pattern, the controller creates one ad hoc. He/she tries to create it as early as possible. If the holding pattern would cross the sector border and the plane would therefore cross it back and forth multiple times, the controller first tries to decrease the holding pattern size (and make the plane fly through it more times) and if that doesn't help, he/she then creates the holding further down the route inside the TMA sector.
+
+The application of the manoeuvre itself is done by \texttt{EomAtaHoldingApplication} module. It calculates how much time the plane needs to spend in the holding pattern to achieve desired arrival time at the runway and incorporates the holding pattern into sgPlan.
+
+The communication with the pilot is ensured by \texttt{EomRSideHoldingApplication} and in much the same way as in STAR application, the whole process of the communication is arranged including delay of the communication, repeated transmissions if the previous tries failed and displaying the message in radio communication window on the radar screen. The message transmitted through radio is represented by \texttt{HoldingPatternData} and includes the holding fix information, holding altitude, pattern heading, holding direction, speed and time, when the holding is completed and plane should continue with the approach.
+
+On the pilot's side, the radio message is received by \texttt{EomPilotHoldingPattern\-Appli\-cation} module that applies the holding to its current flight plan, represented by \texttt{GpsFlight\-Plan\-WrapperPolyline}. New waypoints defining the shape of the the holding pattern are added as well as clearances ensuring the holding will be carried out at the right altitude and speed. Finally, flight plan is replanned using BADA model of the plane's behavior.
+
+\section{Airplane Landing}
+
+The last task performed by \texttt{EomAtaStar\-Application} module is checking if the airplane landed at the correct time (shown in Figure \ref{fig:flowchart1}). When event marking that an airplane landed, the controller checks if the touchdown time fits inside. If it doesn't, there has been probably some error during one of the manouvres performed by the pilot before arrival. The airplane arriving outside its slot is logged to be further investigated.
+
+When the check is completed, the controller removes the slot from the corresponding runway plan to minimize the plan's size leading to faster allocation of future slots. Also the runway plans visualization is updated.
 
 %\subsection{Miles In Trails}

@@ -1,6 +1,8 @@
 %!TEX root = index.tex
 \chapter{Data}
 
+\label{section:data}
+
 This chapter summarizes which data were used for implementation and testing of the module for air traffic control simulation in terminal area. The design and implementation of the module is general and can be used for simulation of any TMA sector but in order to test its functionality concrete sector description and air traffic scenario must be used. It was important to have all the data relevant to the test sector available because any of them missing would cause the whole scenario to be unusable.
 
 \section{Hartsfield–Jackson Atlanta International Airport}
@@ -35,6 +37,21 @@ Together with the description of the Atlanta Airport itself, the definition of s
 
 The definition of the airspace isn't available in a computerized form ready for machine processing and had to be converted to XML sector definition by hand from the available textual description \cite{atlanta-tma}. The resulting sector as seen in agentFly visualization is shown in Figure \ref{fig:tracon}. Problem with this TMA definition is that there is a gap between TMA border border and previously provided neighboring en-route sectors making it impossible to hand-off planes from one sector to the other. Upon consulting with FAA, for the purposes of testing the borders of surrounding en-route sectors were used for TMA definition  instead of the Class B airspace itself. This way the TMA sector touches the en-route sectors allowing airplane hand-offs. The comparison between Class B airspace and used sector definition is shown in Figure \ref{fig:tracon} right. The TMA sector and some neighboring en-route sectors is also shown in Figure \ref{fig:routes} left, note that the sectors do not overlap, the en-route sectors horizontally touch the TMA sector and partly extend above it.
 
+\section{Flights}
+
+\label{section:flights}
+
+Recording of real-world 24 hour traffic in Atlanta Air Route Traffic Control Center (ZTL) on 20th June 2013 was provided by FAA for testing. The log files contain records of 7832 flights. Out of those VFR flights were filtered out because only IFR flights are simulated in AgentFly. Also aircraft of unusual type that can not be simulated using BADA simulation models were removed from the test data. Also flights flying through the \texttt{A80} sector or taking of at the Atlanta Airport were filtered from the logs leaving 1308 flights arriving to the airport.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{graphs/real-flights.pdf}
+    \caption{Left: histogram of number of airplanes appearing on screen in each hour of the simulated 24 hours traffic, Right: graph of representation of aircraft with different weight classes in the test air traffic}
+    \label{graph:flights}
+\end{figure}
+
+Figure \ref{graph:flights} shows the histogram of number of airplanes appearing on screen in each hour and graph of representation of aircraft with different weight classes in the air traffic. The histogram demonstrates the usual progress of the traffic during the day with decline in early morning and peaks around noon and in the evening. The pie chart shows that the traffic going to the Atlanta Airport is rather monotonous 96\% of medium weight aircraft, 4\% heavy aircraft and no light or super heavy planes. Therefore additional test scenario was created to test the scheduling algorithms in situations with more variable composition of arriving flights.
+
 \section{STARs}
 
 STARs are routes that connect the en-route sectors and lead the airplanes to the runways. They define the path itself as well as safe intervals for altitude and speed for selected fixes on the route. The routes are designed in such way that if they cross horizontally, the separation is ensured vertically. This means that once a plane is flying on a STAR route there is no risk of collision with aircraft flying on other routes.
@@ -50,15 +67,36 @@ The STAR definitions are made publicly available by the FAA in non-machine reada
 
 Figure \ref{fig:routes} shows the loaded routes for eastern operation of Atlanta Airport in AgentFly visualization. Atlanta Airport can function in two configurations depending on the prevailing wind direction. The approaches and take-offs can be performed either in western or eastern direction. The route configuration is basically identical, only mirrored along the north-south axis. AgentFly doesn't simulate the wind at the moment and therefore static eastern direction was used for the testing purposes.
 
-\section{Flights}
 
-Recording of real-world 24 hour traffic in Atlanta Air Route Traffic Control Center (ZTL) on 20th June 2013 was provided by FAA for testing. The log files contain records of 7832 flights. Out of those VFR flights were filtered out because only IFR flights are simulated in AgentFly. Also aircraft of unusual type that can not be simulated using BADA simulation models were removed from the test data. Also flights flying through the \texttt{A80} sector or taking of at the Atlanta Airport were filtered from the logs leaving 1308 flights arriving to the airport.
+\subsection{Route Duration Estimation}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{graphs/real-flights.pdf}
-    \caption{Left: histogram of number of airplanes appearing on screen in each hour of the simulated 24 hours traffic, Right: graph of representation of aircraft with different weight classes in the test air traffic}
-    \label{graph:flights}
-\end{figure}
+\red{The goal of the first test was to determine the duration of individual arrival routes.} These durations are an a priori knowledge of the air traffic controller who uses it to determine the approximate time of arrival for scheduling flights to runways. The durations of routes were not provided as part of the route description and therefore needed to be acquired experimentally.
 
-Figure \ref{graph:flights} shows the histogram of number of airplanes appearing on screen in each hour and graph of representation of aircraft with different weight classes in the air traffic. The histogram demonstrates the usual progress of the traffic during the day with decline in early morning and peaks around noon and in the evening. The pie chart shows that the traffic going to the Atlanta Airport is rather monotonous 96\% of medium weight aircraft, 4\% heavy aircraft and no light or super heavy planes. Therefore additional test scenario was created to test the scheduling algorithms in situations with more variable composition of arriving flights.
+Real-world flight data (presented in \ref{section:flights}) were used to estimate the route durations. Three isolated runs were carried out in order to maximize the number of airplanes flying through each applicable route. The flights were launched separately one by one, STAR was applied by the neighboring en-route sector controllers and the duration of flight on the route was measured. No scheduling, holding or diversion manoeuvres were applied.
+
+\begin{table}[h]
+  \centering
+\begin{tabular}{ | l | r | r | r | }
+\hline
+Route   & \# flights & Avg. route duration [m]  & Accuracy margin [s] \\
+\hline
+SINCA $\rightarrow$ 8L                & 238 & 27:35 & 11.531  \\
+SINCA $\xrightarrow{AFTER\_FOGOG}$ 9R & 238 & 24:46 & 11.493  \\
+SINCA $\xrightarrow{AFTER\_NOFIV}$ 9R & 238 & 27:42 & 11.442  \\
+
+FLCON $\rightarrow$ 8L                & 391 & 25:55 & 10.678  \\
+FLCON $\xrightarrow{AFTER\_FOGOG}$ 9R & 391 & 28:44 & 10.505  \\
+FLCON $\xrightarrow{AFTER\_NOFIV}$ 9R & 391 & 26:02 & 10.568  \\
+
+LGC $\rightarrow$ 8L   & 303 & 19:59 & 6.562  \\
+LGC $\rightarrow$ 9R   & 303 & 19:27 & 6.580  \\
+
+RMG $\rightarrow$ 8L   & 353 & 17:21 & 6.969  \\
+RMG $\rightarrow$ 9R   & 353 & 17:26 & 6.887  \\
+\hline
+\end{tabular}
+  \caption{Results of estimation of routes duration}
+  \label{tab:route_duration}
+\end{table}
+
+From the measured durations average route duration was computed to be used as the estimate in further experiments. Also an accuracy margin was determined to describe the precision of the estimate. It was chosen so that at least 90\% of the test flights would arrive not sooner or later from the estimated duration. The resulting durations and accuracy margins are shown in Table \ref{tab:route_duration}.

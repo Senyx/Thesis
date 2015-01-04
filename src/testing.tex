@@ -1,43 +1,8 @@
 %!TEX root = index.tex
-\chapter{Testing}
+\chapter{Experiments}
 \label{section:testing}
 
 \red{TODO: intro}
-
-\section{Estimation of route duration}
-
-The goal of the first test was to determine the duration of individual arrival routes. These durations are an a priori knowledge of the air traffic controller who uses it determine the approximate time of arrival for scheduling flights to runways. The durations of routes were not provided as part of the route description and therefore needed to be acquired experimentally.
-
-Out of 7832 flights going through Atlanta Air Route Traffic Control Center (ZTL) on 20th June 2013, 1319 flights arriving to Atlanta airport were filtered and run in the simulation. Three isolated runs were carried out in order to fly with all available aircraft through all applicable routes. The flights were launched separately one by one, STAR was applied by the TMA sector controller and the duration of flight on the route was measured. No scheduling, holding or diversion manoeuvres were applied.
-
-\begin{table}[h]
-  \centering
-\begin{tabular}{ | l | r | r | r | }
-\hline
-Route   & \# flights & Avg. route duration [m]  & Accuracy margin [s] \\
-\hline
-SINCA $\rightarrow$ 8L                & 238 & 27:35 & 11.531  \\
-SINCA $\xrightarrow{AFTER\_FOGOG}$ 9R & 238 & 24:46 & 11.493  \\
-SINCA $\xrightarrow{AFTER\_NOFIV}$ 9R & 238 & 27:42 & 11.442  \\
-
-FLCON $\rightarrow$ 8L                & 391 & 25:55 & 10.678  \\
-FLCON $\xrightarrow{AFTER\_FOGOG}$ 9R & 391 & 28:44 & 10.505  \\
-FLCON $\xrightarrow{AFTER\_NOFIV}$ 9R & 391 & 26:02 & 10.568  \\
-
-LGC $\rightarrow$ 8L   & 303 & 19:59 & 6.562  \\
-LGC $\rightarrow$ 9R   & 303 & 19:27 & 6.580  \\
-
-RMG $\rightarrow$ 8L   & 353 & 17:21 & 6.969  \\
-RMG $\rightarrow$ 9R   & 353 & 17:26 & 6.887  \\
-\hline
-\end{tabular}
-  \caption{Results of estimation of routes duration}
-  \label{tab:route_duration}
-\end{table}
-
-For each of the the first two runs to runway \texttt{8L} and \texttt{9R} 1316 flights were simulated, 1285 run through with no problem and 31 ended prematurely and were removed from the results. The errors were mainly caused by inconsistencies in the available data. An example of such error can be that the planes flight starts according to the provided data too close to the sector border and proper hand-off can't be accomplished. Last run simulated 639 flights through fixes \texttt{SINCA} and \texttt{FLCON} to runway \texttt{9R} with 629 planned correctly.
-
-From the measured durations average route duration was computed to be used as the estimate in further experiments. Also an accuracy margin was determined to describe the precision of the estimate. It was chosen so that at least 90\% of the test flights would arrive not sooner or later from the estimated duration. The resulting durations and accuracy margins are shown in Table \ref{tab:route_duration}.
 
 \section{Comparison of scheduling algorithms on single runway}
 \label{section:1rwy-alternating}
@@ -206,14 +171,18 @@ New slot ETA  & 20:25  & 0:37 & 0:37 & 0 \\
 
 The addition of second runway to the test caused lower relative traffic density and the test therefore doesn't provide enough information to assess the quality of all the criteria for choosing runway. That is why following test comparing the criteria on real-world scenario was conducted.
 
-\section{Real world flights on multiple runways}
+\section{Real World Flights on Multiple Runways}
 
 \red{TODO}
 
-%\section{Comparison To Real Air Traffic}
-%\section{Flight Duration}
-%\section{Fuel Consumption}
-%\section{Controller Workload}
-%\section{Airport/Runway capacity}
 
 \red{TODO: sjednotit velikost pismen v nadpisech}
+
+\section{Real World Flights With Miles In Trails}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{graphs/mit.pdf}
+    \caption{\red{chart}}
+    \label{graph:mit}
+\end{figure}
